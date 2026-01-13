@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Portal - Major Redesign</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .banner {
+            background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .banner h1 {
+            margin: 0;
+            font-size: 36px;
+            color: #00d4ff;
+        }
+        .banner p {
+            margin: 10px 0 0 0;
+            color: #a0a0a0;
+        }
+        .main-content {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 40px;
+        }
+        .section-header {
+            border-left: 4px solid #00d4ff;
+            padding-left: 20px;
+            margin-bottom: 30px;
+        }
+        .section-header h2 {
+            margin: 0;
+            color: #ffffff;
+        }
+        .section-header .update-info {
+            color: #808080;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .data-grid-wrapper {
+            background-color: #333;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+        .economic-data {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .economic-data thead tr {
+            background-color: #1a1a1a;
+        }
+        .economic-data th {
+            color: #00d4ff;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .economic-data td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #404040;
+            color: #d0d0d0;
+        }
+        .economic-data tbody tr:hover {
+            background-color: #3a3a3a;
+        }
+        .economic-data tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .metric-name {
+            font-weight: 500;
+        }
+        .value-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+        .trend-up {
+            color: #4caf50;
+        }
+        .trend-down {
+            color: #f44336;
+        }
+        .trend-up::before {
+            content: '▲ ';
+        }
+        .trend-down::before {
+            content: '▼ ';
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="banner">
+            <h1>Statistics Portal</h1>
+            <p>Department of Statistics - Economic Intelligence Dashboard</p>
+        </div>
+
+        <div class="main-content">
+            <div class="section-header">
+                <h2>Key Economic Indicators</h2>
+                <div class="update-info">October 2024 Release • Updated Monthly</div>
+            </div>
+
+            <div class="data-grid-wrapper">
+                <div class="table-outer-wrapper">
+                    <div class="table-inner-wrapper">
+                        <table class="economic-data" data-content="statistics" role="table" aria-label="Monthly Economic Indicators">
+                            <thead>
+                                <tr>
+                                    <th data-column="name">Economic Indicator</th>
+                                    <th data-column="value">Latest Value</th>
+                                    <th data-column="change">% Change</th>
+                                    <th data-column="period">Period</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-indicator-code="GDP" data-category="economic">
+                                    <td class="metric-name">Gross Domestic Product</td>
+                                    <td class="value-cell">542,300M</td>
+                                    <td class="trend-up">0.78</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="CPI" data-category="economic">
+                                    <td class="metric-name">Consumer Price Index</td>
+                                    <td class="value-cell">118.5</td>
+                                    <td class="trend-up">0.59</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="UNEMPLOYMENT" data-category="labor">
+                                    <td class="metric-name">Unemployment Rate</td>
+                                    <td class="value-cell">3.2%</td>
+                                    <td class="trend-down">5.88</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="RETAIL_SALES" data-category="economic">
+                                    <td class="metric-name">Retail Sales</td>
+                                    <td class="value-cell">45,600M</td>
+                                    <td class="trend-up">1.79</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="INDUSTRIAL_PROD" data-category="production">
+                                    <td class="metric-name">Industrial Production Index</td>
+                                    <td class="value-cell">112.3</td>
+                                    <td class="trend-up">0.45</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="HOUSING_STARTS" data-category="housing">
+                                    <td class="metric-name">Housing Starts</td>
+                                    <td class="value-cell">1,850</td>
+                                    <td class="trend-down">3.65</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="EXPORTS" data-category="trade">
+                                    <td class="metric-name">Total Exports</td>
+                                    <td class="value-cell">28,900M</td>
+                                    <td class="trend-up">2.48</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                                <tr data-indicator-code="IMPORTS" data-category="trade">
+                                    <td class="metric-name">Total Imports</td>
+                                    <td class="value-cell">32,400M</td>
+                                    <td class="trend-up">1.89</td>
+                                    <td>Oct 2024</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer style="margin-top: 50px; text-align: center; color: #606060; font-size: 12px; padding-bottom: 30px;">
+            <p>Department of Statistics | Data Services Division<br>
+            Contact: statistics@gov.example | © 2024</p>
+        </footer>
+    </div>
+</body>
+</html>

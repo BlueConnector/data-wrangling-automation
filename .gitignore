@@ -1,0 +1,5 @@
+output/*.xlsx
+output/*.docx
+output/*.pdf
+output/*.html
+!output/.gitkeep

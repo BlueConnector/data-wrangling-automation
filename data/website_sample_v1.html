@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department of Statistics Data Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .content-wrapper {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .last-updated {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th {
+            background-color: #003366;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .positive {
+            color: #007700;
+        }
+        .negative {
+            color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Department of Statistics Data Portal</h1>
+        <p>Official Economic and Social Indicators</p>
+    </div>
+
+    <div class="content-wrapper">
+        <h1>Monthly Statistical Indicators</h1>
+        <div class="last-updated">Last Updated: October 2024</div>
+        
+        <table id="statistics-table" class="data-table stats-portal" role="grid">
+            <thead>
+                <tr>
+                    <th>Indicator</th>
+                    <th>Current Value</th>
+                    <th>Change (%)</th>
+                    <th>Period</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-indicator-code="GDP">
+                    <td class="indicator-name">Gross Domestic Product</td>
+                    <td class="current-value">542,300M</td>
+                    <td class="change-percent positive">+0.78</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="CPI">
+                    <td class="indicator-name">Consumer Price Index</td>
+                    <td class="current-value">118.5</td>
+                    <td class="change-percent positive">+0.59</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="UNEMPLOYMENT">
+                    <td class="indicator-name">Unemployment Rate</td>
+                    <td class="current-value">3.2%</td>
+                    <td class="change-percent negative">-5.88</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="RETAIL_SALES">
+                    <td class="indicator-name">Retail Sales</td>
+                    <td class="current-value">45,600M</td>
+                    <td class="change-percent positive">+1.79</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="INDUSTRIAL_PROD">
+                    <td class="indicator-name">Industrial Production Index</td>
+                    <td class="current-value">112.3</td>
+                    <td class="change-percent positive">+0.45</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="HOUSING_STARTS">
+                    <td class="indicator-name">Housing Starts</td>
+                    <td class="current-value">1,850</td>
+                    <td class="change-percent negative">-3.65</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="EXPORTS">
+                    <td class="indicator-name">Total Exports</td>
+                    <td class="current-value">28,900M</td>
+                    <td class="change-percent positive">+2.48</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+                <tr data-indicator-code="IMPORTS">
+                    <td class="indicator-name">Total Imports</td>
+                    <td class="current-value">32,400M</td>
+                    <td class="change-percent positive">+1.89</td>
+                    <td class="period">Oct 2024</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer style="margin-top: 40px; text-align: center; color: #666; font-size: 12px;">
+        <p>Department of Statistics | Contact: statistics@gov.example | © 2024</p>
+    </footer>
+</body>
+</html>
