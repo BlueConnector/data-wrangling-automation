@@ -6,7 +6,7 @@ Welcome to the hands-on repository for the Data Analytics Training Session!
 ## Repository Structure
 
 ```
-dos-analytics-training/
+data-wrangling-automation/
 ├── README.md                          # This file
 ├── requirements.txt                   # Python dependencies
 ├── .devcontainer/
@@ -54,8 +54,8 @@ If you prefer to work locally:
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd dos-analytics-training
+git clone https://github.com/BlueConnector/data-wrangling-automation.git
+cd data-wrangling-automation
 
 # Create a virtual environment
 python -m venv venv
@@ -231,17 +231,16 @@ All generated files will be saved to the `output/` directory:
 
 ## Contact
 
-**Instructor:** [Name]  
-**Email:** [Email]  
-**Office Hours:** [Schedule]
+**Instructor:** Jon Scheele  
+**Email:** jon@blueconnector.co
 
 ## License
 
-Training materials © 2024 Department of Statistics  
+Training materials © 2026 Blue Connector Pte Ltd  
 For educational use only
 
 ---
 
-**Questions?** Check the solutions, ask the instructor, or post in the training Slack channel!
+**Questions?** Check the solutions, ask the instructor, or post in the training chat!
 
 Happy coding! 🚀
