@@ -405,8 +405,8 @@ def main():
     
     print("\n" + "="*80)
     print("  DEMO: Building a Resilient Web Scraper")
-    print("  Instructor: [Your Name]")
-    print("  DOS Data Analytics Training")
+    print("  Instructor: Jon Scheele")
+    print("  Data Analytics Training for Statisticians")
     print("="*80)
     
     Demo.pause("Press Enter to start the demonstration...")

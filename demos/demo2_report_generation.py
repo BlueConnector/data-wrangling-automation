@@ -588,7 +588,7 @@ def main():
     print("\n" + "="*80)
     print("  DEMO: Automated Report Generation")
     print("  From Manual Drudgery to Automated Excellence")
-    print("  Instructor: [Your Name]")
+    print("  Instructor: Jon Scheele")
     print("="*80)
     
     Demo.pause("Press Enter to start the demonstration...")
