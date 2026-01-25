@@ -3,3 +3,11 @@ output/*.docx
 output/*.pdf
 output/*.html
 !output/.gitkeep
+
+# Virtual environments
+*/venv/
+venv/
+.venv/
+env/
+.ENV/
+ENV/
