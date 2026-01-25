@@ -41,19 +41,19 @@ class AdaptiveScraper:
         # Try each strategy in order until one succeeds
         
         # Strategy 1: Try by specific ID
-        # Hint: soup.select('#statistics-table tbody tr')
+        # Hint: set selector to: '#statistics-table tbody tr'
         strategy_1_selector = None  # TODO: Add your selector
         
         # Strategy 2: Try by class name
-        # Hint: soup.select('table.data-table tbody tr')
+        # Hint: set selector to: 'table.data-table tbody tr'
         strategy_2_selector = None  # TODO: Add your selector
         
         # Strategy 3: Try by data attribute
-        # Hint: soup.select('table[data-content="statistics"] tbody tr')
+        # Hint: set selector to: 'table[data-content="statistics"] tbody tr'
         strategy_3_selector = None  # TODO: Add your selector
         
         # Strategy 4: Try by table structure (any table with tbody)
-        # Hint: soup.select('table tbody tr')
+        # Hint: set selector to: 'table tbody tr'
         strategy_4_selector = None  # TODO: Add your selector
         
         # Create a list of strategies to try
