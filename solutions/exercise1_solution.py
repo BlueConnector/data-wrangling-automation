@@ -1,75 +1,74 @@
 """
-Exercise 1 Solution: Adaptive Web Scraping
-Complete implementation of a resilient web scraper
+Exercise 1 Solution: Data-Driven Adaptive Web Scraping
+Complete implementation using configuration file instead of hardcoded selectors
 
 This solution demonstrates:
-1. Multiple selector strategies with fallback
-2. Comprehensive data validation
-3. Robust error handling
-4. Logging for debugging and monitoring
+1. Loading selector strategies from CSV configuration
+2. Data-driven scraping approach
+3. Easy maintenance without code changes
+4. Clear documentation through configuration
 """
 
-from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
+import pandas as pd
 import logging
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 
-class AdaptiveScraper:
-    """A web scraper that adapts to changing HTML layouts"""
+class ConfigDrivenScraper:
+    """A web scraper that reads selector strategies from a configuration file"""
     
-    def __init__(self, html_content):
+    def __init__(self, page, selectors_df):
         """
-        Initialize the scraper with HTML content
+        Initialize the scraper with a Playwright page and selector configuration
         
         Args:
-            html_content (str): The HTML to parse
+            page: Playwright page object (browser page)
+            selectors_df: DataFrame containing selector configurations for this URL
         """
-        self.soup = BeautifulSoup(html_content, 'html.parser')
+        self.page = page
+        self.selectors_df = selectors_df
         self.data = []
         
     def extract_statistics(self):
         """
-        Extract statistics using multiple selector strategies with fallback
+        Extract statistics using selectors from configuration file
+        Tries selectors in priority order until one succeeds
         
         Returns:
             list: List of dictionaries containing indicator data
         """
-        # Define multiple selector strategies in order of preference
-        # More specific selectors first, more general ones as fallback
+        # Sort selectors by priority (lower number = higher priority)
+        sorted_selectors = self.selectors_df.sort_values('priority')
         
-        strategies = [
-            # Strategy 1: Specific ID selector (works for v1)
-            ('ID selector (#statistics-table)', '#statistics-table tbody tr'),
+        # Try each enabled selector until one succeeds
+        for idx, row in sorted_selectors.iterrows():
+            # Skip disabled selectors
+            if str(row['enabled']).lower() == 'false':
+                logging.info(f"⊘ Skipping disabled selector: {row['selector_name']}")
+                if 'comment' in row and pd.notna(row['comment']):
+                    logging.info(f"  → Reason: {row['comment']}")
+                continue
             
-            # Strategy 2: Alternative ID selector (works for v2)
-            ('Alternative ID (#stats-data-grid)', '#stats-data-grid tbody tr'),
+            selector_name = row['selector_name']
+            selector = row['selector']
+            comment = row.get('comment', 'No comment provided')
             
-            # Strategy 3: Class-based selector (works for v1)
-            ('Class selector (.data-table)', 'table.data-table tbody tr'),
-            
-            # Strategy 4: Alternative class selector (works for v2)
-            ('Alternative class (.stats-grid-view)', 'table.stats-grid-view tbody tr'),
-            
-            # Strategy 5: Data attribute selector (works for all versions - MOST STABLE)
-            ('Data attribute selector', 'table[data-content="statistics"] tbody tr'),
-            
-            # Strategy 6: ARIA role selector (works for all versions)
-            ('ARIA role selector', 'table[role="grid"] tbody tr, table[role="table"] tbody tr'),
-            
-            # Strategy 7: Generic table structure (last resort, works for all)
-            ('Generic table structure', 'table tbody tr'),
-        ]
-        
-        # Try each strategy until one succeeds
-        for strategy_name, selector in strategies:
             try:
-                rows = self.soup.select(selector)
+                # Log the attempt with comment for context
+                logging.info(f"Trying {selector_name}...")
+                if pd.notna(comment):
+                    logging.info(f"  → Context: {comment}")
+                
+                # Use Playwright to find elements
+                rows = self.page.query_selector_all(selector)
                 
                 # Check if we got results
                 if rows and len(rows) > 0:
-                    logging.info(f"✓ {strategy_name} succeeded! Found {len(rows)} rows")
+                    logging.info(f"✓ {selector_name} succeeded! Found {len(rows)} rows")
                     
                     # Extract data from rows
                     self.data = self._parse_rows(rows)
@@ -79,13 +78,17 @@ class AdaptiveScraper:
                         logging.info(f"✓ Data validation passed")
                         return self.data
                     else:
-                        logging.warning(f"✗ Data validation failed for {strategy_name}")
+                        logging.warning(f"✗ Data validation failed for {selector_name}")
                         continue
                 else:
-                    logging.warning(f"✗ {strategy_name} found no rows")
+                    logging.warning(f"✗ {selector_name} found no rows")
+                    if pd.notna(comment):
+                        logging.info(f"  → Note: {comment}")
                     
             except Exception as e:
-                logging.warning(f"✗ {strategy_name} failed: {str(e)}")
+                logging.warning(f"✗ {selector_name} failed: {str(e)}")
+                if pd.notna(comment):
+                    logging.info(f"  → Context: {comment}")
                 continue
         
         # If we get here, all strategies failed
@@ -93,10 +96,10 @@ class AdaptiveScraper:
     
     def _parse_rows(self, rows):
         """
-        Parse table rows into structured data
+        Parse table rows into structured data using Playwright
         
         Args:
-            rows: BeautifulSoup result set of table rows
+            rows: List of Playwright ElementHandle objects
             
         Returns:
             list: List of dictionaries with indicator data
@@ -105,21 +108,20 @@ class AdaptiveScraper:
         
         for row in rows:
             try:
-                # Get all cells in the row
-                cells = row.find_all('td')
+                # Get all cells in the row using Playwright
+                cells = row.query_selector_all('td')
                 
                 # Skip rows with insufficient cells
                 if len(cells) < 4:
                     continue
                 
-                # Extract data from cells
-                # Most tables have: Indicator Name | Value | Change | Period
+                # Extract text content from each cell
                 indicator = {
-                    'name': cells[0].text.strip(),
-                    'value': cells[1].text.strip(),
-                    'change': cells[2].text.strip(),
-                    'period': cells[3].text.strip(),
-                    'code': row.get('data-indicator-code', 'UNKNOWN')
+                    'name': cells[0].text_content().strip(),
+                    'value': cells[1].text_content().strip(),
+                    'change': cells[2].text_content().strip(),
+                    'period': cells[3].text_content().strip(),
+                    'code': row.get_attribute('data-indicator-code') or 'UNKNOWN'
                 }
                 
                 # Only add if we got meaningful data
@@ -167,7 +169,7 @@ class AdaptiveScraper:
                 logging.error(f"Validation failed: Invalid indicator name: '{item['name']}'")
                 return False
         
-        # Check 5: Do we have indicator codes? (from data-indicator-code attribute)
+        # Check 5: Do we have indicator codes?
         codes_found = sum(1 for item in data if item['code'] != 'UNKNOWN')
         if codes_found > 0:
             logging.info(f"✓ Found {codes_found} indicator codes in data attributes")
@@ -194,45 +196,121 @@ class AdaptiveScraper:
         print(f"\n{'='*80}\n")
 
 
-def test_scraper():
-    """Test the scraper against all three HTML versions"""
+def load_selector_config(config_file='data/selectors.csv'):
+    """
+    Load selector configuration from CSV file
     
-    html_files = [
-        ('data/website_sample_v1.html', 'Original HTML'),
-        ('data/website_sample_v2.html', 'Modified HTML (changed IDs/classes)'),
-        ('data/website_sample_v3.html', 'Major redesign'),
-    ]
+    Args:
+        config_file (str): Path to the selectors CSV file
+        
+    Returns:
+        DataFrame: Selector configuration
+    """
+    try:
+        # Load the CSV file
+        selectors_df = pd.read_csv(config_file)
+        
+        # Validate required columns
+        required_columns = ['url', 'selector_name', 'selector', 'priority', 'enabled']
+        missing_columns = [col for col in required_columns if col not in selectors_df.columns]
+        
+        if missing_columns:
+            raise ValueError(f"Missing required columns: {missing_columns}")
+        
+        print(f"✓ Loaded {len(selectors_df)} selector configurations from {config_file}")
+        
+        # Show summary
+        unique_urls = selectors_df['url'].nunique()
+        print(f"  → Configurations for {unique_urls} different pages")
+        
+        # Display sample comments to show what's documented
+        if 'comment' in selectors_df.columns:
+            print(f"\n📝 Sample selector documentation:")
+            for idx, row in selectors_df.head(3).iterrows():
+                if pd.notna(row.get('comment')):
+                    print(f"  • {row['selector_name']}: {row['comment']}")
+        
+        return selectors_df
+    
+    except FileNotFoundError:
+        print(f"✗ Error: Configuration file not found: {config_file}")
+        print("Make sure data/selectors.csv exists in the repository")
+        return None
+    except Exception as e:
+        print(f"✗ Error loading configuration: {str(e)}")
+        return None
+
+
+def test_scraper():
+    """
+    Test the scraper against all pages configured in the selectors file
+    Uses Playwright for browser automation
+    """
+    # Load selector configuration from CSV
+    selectors_config = load_selector_config('data/selectors.csv')
+    
+    if selectors_config is None:
+        print("Cannot proceed without selector configuration")
+        return
+    
+    # Get unique URLs from the configuration
+    urls = selectors_config['url'].unique()
+    
+    print(f"\n✓ Found {len(urls)} unique pages to scrape")
     
     results = []
     
-    for filepath, description in html_files:
-        print(f"\n{'='*80}")
-        print(f"Testing: {description}")
-        print(f"File: {filepath}")
-        print(f"{'='*80}")
+    with sync_playwright() as p:
+        # Launch browser in headless mode
+        browser = p.chromium.launch(headless=True)
         
-        try:
-            # Load the HTML file
-            with open(filepath, 'r', encoding='utf-8') as f:
-                html_content = f.read()
+        for url in urls:
+            print(f"\n{'='*80}")
+            print(f"Testing: {url}")
+            print(f"{'='*80}")
             
-            # Create scraper and extract data
-            scraper = AdaptiveScraper(html_content)
-            scraper.extract_statistics()
-            
-            # Display results
-            scraper.display_results()
-            
-            print(f"✓ SUCCESS: Scraper adapted to {description}")
-            results.append({'file': description, 'status': 'SUCCESS', 'count': len(scraper.data)})
-            
-        except FileNotFoundError:
-            print(f"✗ ERROR: File not found: {filepath}")
-            print(f"Make sure you're running this from the repository root directory")
-            results.append({'file': description, 'status': 'FILE NOT FOUND', 'count': 0})
-        except Exception as e:
-            print(f"✗ FAILED: {str(e)}")
-            results.append({'file': description, 'status': f'FAILED: {str(e)}', 'count': 0})
+            try:
+                # Create a new page (tab)
+                page = browser.new_page()
+                
+                # Get selectors for this specific URL
+                url_selectors = selectors_config[selectors_config['url'] == url]
+                
+                print(f"  → Found {len(url_selectors)} configured selectors for this page")
+                
+                # Navigate to the file (local file path)
+                file_path = os.path.abspath(url)
+                page.goto(f'file://{file_path}')
+                
+                # For live URLs, you would use:
+                # page.goto(url)
+                
+                # Wait for the table to be loaded
+                page.wait_for_selector('table', timeout=5000)
+                
+                # Create scraper and extract data
+                scraper = ConfigDrivenScraper(page, url_selectors)
+                scraper.extract_statistics()
+                
+                # Display results
+                scraper.display_results()
+                
+                print(f"✓ SUCCESS: Scraper adapted to {url}")
+                results.append({'url': url, 'status': 'SUCCESS', 'count': len(scraper.data)})
+                
+                # Close the page
+                page.close()
+                
+            except FileNotFoundError:
+                print(f"✗ ERROR: File not found: {url}")
+                print(f"Make sure you're running this from the repository root directory")
+                results.append({'url': url, 'status': 'FILE NOT FOUND', 'count': 0})
+            except Exception as e:
+                print(f"✗ FAILED: {str(e)}")
+                results.append({'url': url, 'status': f'FAILED: {str(e)}', 'count': 0})
+        
+        # Close the browser
+        browser.close()
     
     # Summary
     print("\n" + "="*80)
@@ -240,76 +318,91 @@ def test_scraper():
     print("="*80)
     for result in results:
         status_symbol = "✓" if result['status'] == 'SUCCESS' else "✗"
-        print(f"{status_symbol} {result['file']}: {result['status']}")
+        print(f"{status_symbol} {result['url']}: {result['status']}")
         if result['count'] > 0:
             print(f"  → Extracted {result['count']} indicators")
     print("="*80)
 
 
-def demonstrate_selector_strategies():
+def demonstrate_config_advantages():
     """
-    Demonstrate why different selector strategies work for different versions
+    Demonstrate the advantages of configuration-driven scraping
     """
     print("\n" + "="*80)
-    print("SELECTOR STRATEGY ANALYSIS")
+    print("ADVANTAGES OF CONFIGURATION-DRIVEN SCRAPING")
     print("="*80)
     
     print("""
-Why Multiple Strategies Work:
+1. NON-PROGRAMMERS CAN UPDATE SELECTORS
+   • Open data/selectors.csv in Excel or any text editor
+   • Add new selectors or modify existing ones
+   • Change priorities to test different strategies
+   • Enable/disable selectors without touching code
 
-1. ID Selectors (#statistics-table, #stats-data-grid)
-   - PRO: Fast and specific
-   - CON: Break when IDs change (v1 → v2 transition)
-   - Works for: v1, v2 (different selectors needed)
+2. CLEAR DOCUMENTATION
+   • The CSV file serves as documentation
+   • Anyone can see what selectors work for which pages
+   • Priority order is explicit and visible
+   • Easy to understand what the scraper is trying
 
-2. Class Selectors (.data-table, .stats-grid-view)
-   - PRO: Commonly used for styling
-   - CON: Frequently changed during redesigns
-   - Works for: v1, v2 (different selectors needed)
+3. VERSION CONTROL FRIENDLY
+   • Track selector changes over time in Git
+   • See when selectors were added or modified
+   • Understand why selectors were changed (commit messages)
+   • Roll back to previous configurations if needed
 
-3. Data Attribute Selectors ([data-content="statistics"])
-   - PRO: Semantic meaning, rarely changed
-   - CON: Not always present
-   - Works for: ALL VERSIONS ✓ (Most stable!)
+4. EASY TESTING AND DEBUGGING
+   • Temporarily disable failing selectors
+   • Test new selectors by adding them to CSV
+   • Compare different selector strategies easily
+   • No risk of breaking code syntax
 
-4. ARIA Selectors ([role="grid"], [role="table"])
-   - PRO: Accessibility attributes, stable
-   - CON: Not universally used
-   - Works for: ALL VERSIONS ✓
+5. SEPARATION OF CONCERNS
+   • Business logic (what to scrape) separate from code (how to scrape)
+   • Data team can manage selectors
+   • Development team maintains core scraping logic
+   • Reduces deployment risk
 
-5. Structural Selectors (table tbody tr)
-   - PRO: Always works if structure is similar
-   - CON: Too generic, may catch wrong tables
-   - Works for: ALL VERSIONS (but least specific)
+EXAMPLE WORKFLOW:
 
-KEY INSIGHT: Semantic and accessibility attributes (data-*, role, aria-*)
-are the most resilient because they describe WHAT the content is, not
-HOW it looks. They survive redesigns better than IDs and classes.
+When a website changes:
+1. Data analyst opens selectors.csv
+2. Adds new selector for the changed page
+3. Sets appropriate priority
+4. Runs scraper to test
+5. Adjusts priority or adds more selectors as needed
+6. Commits changes to Git with description
+
+No code deployment needed!
     """)
     print("="*80 + "\n")
 
 
 if __name__ == "__main__":
     print("="*80)
-    print("Exercise 1 Solution: Adaptive Web Scraping")
+    print("Exercise 1 Solution: Data-Driven Adaptive Web Scraping")
     print("="*80)
+    print("\nThis solution demonstrates configuration-driven scraping.")
+    print("Selectors are loaded from data/selectors.csv")
+    print("Non-programmers can update selectors by editing the CSV file!\n")
     
     # Run the tests
     test_scraper()
     
-    # Show strategy analysis
-    demonstrate_selector_strategies()
+    # Show advantages
+    demonstrate_config_advantages()
     
     print("\n" + "="*80)
     print("Exercise Complete!")
     print("="*80)
     print("\nKey Takeaways:")
-    print("1. Always implement multiple selector fallback strategies")
-    print("2. Prioritize semantic attributes (data-*, aria-*) over IDs/classes")
-    print("3. Validate data at every step to catch extraction failures early")
-    print("4. Log which strategies work to improve future selectors")
-    print("5. Plan for failure - websites WILL change")
+    print("1. Configuration files separate data from code logic")
+    print("2. Non-technical users can maintain selector strategies")
+    print("3. Changes don't require code deployment")
+    print("4. Clear documentation through CSV structure")
+    print("5. Easy to test and debug different strategies")
     print("\nNext Steps:")
-    print("- Apply this pattern to your actual data sources")
-    print("- Set up monitoring to detect when selectors break")
-    print("- Build a library of reusable scraper components")
+    print("- Open data/selectors.csv and examine the structure")
+    print("- Try changing priorities or adding new selectors")
+    print("- Test how easy it is to maintain without coding")
+    print("- Apply this pattern to your production scrapers")
