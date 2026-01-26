@@ -1,0 +1,1 @@
+# Selector strategies for adaptive scraping

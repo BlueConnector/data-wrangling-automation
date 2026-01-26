@@ -1,12 +1,34 @@
+# Core data processing
 pandas==3.0.0
 numpy==2.4.1
+
+# Web scraping
 beautifulsoup4==4.14.3
 playwright==1.57.0
 requests==2.32.5
-openpyxl==3.1.5
-python-docx==1.2.0
-plotly==6.5.2
-dash==3.4.0
-xlsxwriter==3.2.9
 lxml==6.0.2
+
+# Excel manipulation
+openpyxl==3.1.5
+xlsxwriter==3.2.9
+
+# Word document generation
+python-docx==1.2.0
+
+# Data visualization
+matplotlib==3.10.8
+plotly==6.5.2
+
+# Web dashboard
+dash==3.4.0
+
+# Utilities
+python-dateutil==2.9.0.post0
+pytz==2025.2
 Jinja2==3.1.6
+
+# Development (optional)
+pytest==9.0.2
+pytest-cov==7.0.0
+black==26.1.0
+flake8==7.3.0

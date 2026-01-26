@@ -1,45 +1,21 @@
-"""
-Demo 1: Building a Resilient Web Scraper
-Instructor demonstration showing adaptive scraping patterns
+"""Resilient scraper with multiple selector strategies"""
+from .base_scraper import BaseScraper
 
-This demo is designed for live presentation and includes:
-- Step-by-step progression from fragile to resilient
-- Clear console output for audience visibility
-- Deliberate failures to demonstrate problems
-- Recovery mechanisms to show solutions
-"""
-
-from bs4 import BeautifulSoup
-import logging
-import time
-
-# Configure logging for demo visibility
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(levelname)s: %(message)s'
-)
-
-
-class Demo:
-    """Helper class for demo presentation"""
+class AdaptiveScraper(BaseScraper):
+    def __init__(self, url, selector_strategies):
+        super().__init__(url)
+        self.selector_strategies = selector_strategies
     
-    @staticmethod
-    def pause(message="Press Enter to continue...", seconds=0):
-        """Pause for audience comprehension"""
-        if seconds > 0:
-            time.sleep(seconds)
-        else:
-            input(f"\n{message}")
-    
-    @staticmethod
-    def section(title):
-        """Print a section header"""
-        print("\n" + "="*80)
-        print(f"  {title}")
-        print("="*80 + "\n")
-
-
-def demo_fragile_scraper():
+    def parse(self):
+        """Try multiple selector strategies until success"""
+        for strategy in self.selector_strategies:
+            try:
+                data = strategy.extract(self.soup)
+                if self.validate_data(data):
+                    return data
+            except Exception as e:
+                continue
+        raise ValueError("All selector strategies failed")
     """
     DEMO PART 1: Show why scrapers break
     Demonstrate a fragile scraper that only works with v1

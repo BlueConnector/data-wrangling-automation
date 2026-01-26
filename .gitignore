@@ -1,13 +1,66 @@
+# Outputs
 output/*.xlsx
 output/*.docx
 output/*.pdf
 output/*.html
 !output/.gitkeep
 
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
 # Virtual environments
-*/venv/
 venv/
 .venv/
 env/
 .ENV/
 ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project specific
+*.log
+.env
+config.local.py
+
+# Data files (keep samples)
+data/*.csv
+!data/sample_*.csv
+!data/historical_trends.csv
+data/*.xlsx
+!data/templates/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

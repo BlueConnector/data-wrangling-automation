@@ -1,52 +1,20 @@
-"""
-Scraper Engine - Backend logic for web scraping
-Handles all scraping operations called by the Flask API
-"""
+"""Base scraper class with common functionality"""
+class BaseScraper:
+    def __init__(self, url):
+        self.url = url
+        self.data = None
 
-from bs4 import BeautifulSoup
-import pandas as pd
-import os
-import logging
+    def fetch(self):
+        """Fetch HTML content"""
+        pass
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+    def parse(self):
+        """Parse HTML - to be implemented by subclasses"""
+        raise NotImplementedError
 
-
-class ScraperEngine:
-    """Main scraper engine that executes scraping operations"""
-    
-    def __init__(self):
-        """Initialize the scraper engine"""
-        self.base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
-        self.data_path = os.path.join(self.base_path, 'data')
-        self.selectors_file = os.path.join(self.data_path, 'selectors.csv')
-        
-    def get_selectors(self):
-        """
-        Load selectors from CSV configuration file
-        
-        Returns:
-            list: List of selector configurations
-        """
-        try:
-            selectors_df = pd.read_csv(self.selectors_file)
-            
-            # Convert DataFrame to list of dictionaries
-            selectors = selectors_df.to_dict('records')
-            
-            # Convert to serializable format
-            for selector in selectors:
-                selector['enabled'] = str(selector['enabled']).lower() == 'true'
-                selector['priority'] = int(selector['priority'])
-            
-            logger.info(f"Loaded {len(selectors)} selectors from configuration")
-            return selectors
-            
-        except Exception as e:
-            logger.error(f"Error loading selectors: {str(e)}")
-            return []
-    
-    def get_html_samples(self):
+    def validate(self):
+        """Validate scraped data"""
+        pass
         """
         Load HTML samples for each version
         
