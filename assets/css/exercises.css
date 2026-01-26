@@ -18,8 +18,8 @@
 
 /* Output area */
 .output-area {
-    background: #f8f9fa;
-    border: 1px solid #ddd;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
     border-radius: var(--radius-md);
     padding: 1rem;
     margin: 1rem 0;
@@ -31,7 +31,7 @@
 .progress-bar {
     width: 100%;
     height: 8px;
-    background: #e5e7eb;
+    background: var(--gray-200);
     border-radius: var(--radius-sm);
     overflow: hidden;
 }
@@ -40,4 +40,302 @@
     height: 100%;
     background: var(--primary-color);
     transition: width 0.3s;
+}
+
+/* Exercise Modal */
+.exercise-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.exercise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.exercise-content {
+    position: relative;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-width: 90vw;
+    max-height: 90vh;
+    width: 800px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--primary-dark);
+    color: white;
+}
+
+.exercise-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.exercise-progress {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-text {
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.exercise-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+}
+
+.step-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.step-content h3 {
+    margin-top: 0;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--orange);
+    padding-bottom: 0.5rem;
+}
+
+#code-display {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.exercise-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+.exercise-controls button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#prev-btn {
+    background: var(--gray-200);
+    color: var(--gray-700);
+}
+
+#prev-btn:hover:not(:disabled) {
+    background: var(--gray-300);
+}
+
+#run-btn {
+    background: var(--primary-dark);
+    color: white;
+}
+
+#run-btn:hover {
+    background: var(--primary-light);
+}
+
+#next-btn {
+    background: var(--orange);
+    color: white;
+}
+
+#next-btn:hover:not(:disabled) {
+    background: #e69300;
+}
+
+.exercise-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.output-success {
+    color: var(--primary-dark);
+    background: rgba(55, 160, 244, 0.1);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--primary-light);
+}
+
+.output-error {
+    color: var(--red);
+    background: rgba(165, 36, 34, 0.1);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--red);
+}
+
+.error-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--red);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 1001;
+}
+
+/* Demo-specific styles */
+.demo-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.selector-info {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+}
+
+.selector-info h3 {
+    margin-top: 0;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--orange);
+    padding-bottom: 0.5rem;
+}
+
+.selector-details p {
+    margin: 0.5rem 0;
+}
+
+.selector-details code {
+    background: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Monaco', monospace;
+    border: 1px solid var(--gray-200);
+}
+
+.results-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+}
+
+.results-section h4 {
+    margin-top: 0;
+    color: var(--primary-dark);
+}
+
+.result-status {
+    margin: 1rem 0;
+}
+
+.status-indicator {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    text-align: center;
+}
+
+.status-indicator.testing {
+    background: var(--gray-100);
+    color: var(--gray-700);
+    border: 1px solid var(--gray-300);
+}
+
+.status-indicator.success {
+    background: rgba(55, 160, 244, 0.1);
+    color: var(--primary-dark);
+    border: 1px solid var(--primary-light);
+}
+
+.status-indicator.failure {
+    background: rgba(254, 144, 0, 0.1);
+    color: var(--orange);
+    border: 1px solid var(--orange);
+}
+
+.status-indicator.error {
+    background: rgba(165, 36, 34, 0.1);
+    color: var(--red);
+    border: 1px solid var(--red);
+}
+
+.status-indicator.completion {
+    background: rgba(7, 25, 170, 0.1);
+    color: var(--primary-dark);
+    border: 1px solid var(--primary-dark);
+}
+
+.data-table-container {
+    margin-top: 1rem;
+}
+
+.data-table-container h5 {
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+}
+
+.demo-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
 }
