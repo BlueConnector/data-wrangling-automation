@@ -1,817 +1,114 @@
-# Complete Consolidated Repository File Contents
-
-This document contains all files for the refactored data-wrangling-automation repository.
-
----
-
-## 1. ROOT DIRECTORY FILES
-
-### `index.html`
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Wrangling Training | Blue Connector</title>
+    <title>Data Wrangling and Automation Course</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/exercises.css">
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="header-title">Data Wrangling & Automation</h1>
-                <p class="header-subtitle">A hands-on course for statisticians and data professionals</p>
-            </div>
-            <nav class="header-nav">
-                <button class="nav-btn active" data-section="welcome">Welcome</button>
-                <button class="nav-btn" data-section="setup">Setup</button>
-                <button class="nav-btn" data-section="exercises">Exercises</button>
-                <button class="nav-btn" data-section="resources">Resources</button>
-            </nav>
-        </div>
+    <header>
+        <h1>Data Wrangling and Automation</h1>
+        <p>Learn to build resilient data pipelines</p>
     </header>
 
-    <main class="main-content">
-        <div class="container">
-            <!-- Welcome Section -->
-            <section id="welcome" class="content-section active">
-                <div class="welcome-hero">
-                    <h2>Welcome to Data Wrangling Training!</h2>
-                    <p class="lead">Learn to automate repetitive data tasks and build resilient data pipelines.</p>
-                </div>
+    <main>
+        <section id="introduction">
+            <h2>Welcome!</h2>
+            <p>This course teaches you to automate data tasks. You'll learn to:</p>
+            <ul>
+                <li>Build web scrapers that adapt to changing websites</li>
+                <li>Automate report generation</li>
+                <li>Create interactive dashboards</li>
+            </ul>
+            <p>Work through the exercises in order. Each builds on the previous one.</p>
+        </section>
 
-                <div class="info-cards">
-                    <div class="info-card">
-                        <div class="info-icon">⏱️</div>
-                        <h3>Duration</h3>
-                        <p>2-3 hours</p>
+        <section id="selector-walkthrough">
+            <h2>No-Code Walkthrough: Understanding Selector Strategies</h2>
+            <p>Before writing code, let's understand how web scraping works.</p>
+
+            <div class="selector-demo">
+                <h3>Selector Strategies in Action</h3>
+                <p>Imagine scraping this sample table:</p>
+                <table class="sample-table">
+                    <tr><th>Indicator</th><th>Value</th><th>Change</th></tr>
+                    <tr><td>GDP Growth</td><td>2.1%</td><td>+0.3%</td></tr>
+                    <tr><td>Inflation</td><td>3.2%</td><td>-0.1%</td></tr>
+                </table>
+
+                <h4>Different Selector Approaches:</h4>
+                <div class="strategy-examples">
+                    <div class="strategy">
+                        <h5>1. ID-Based (Most Reliable)</h5>
+                        <code>#statistics-table tbody tr</code>
+                        <p>Uses unique IDs - works until site redesigns</p>
                     </div>
-                    <div class="info-card">
-                        <div class="info-icon">🎯</div>
-                        <h3>Difficulty</h3>
-                        <p>Intermediate</p>
+                    <div class="strategy">
+                        <h5>2. Class-Based (Common)</h5>
+                        <code>table.data-table tbody tr</code>
+                        <p>Uses CSS classes - reliable if classes are stable</p>
                     </div>
-                    <div class="info-card">
-                        <div class="info-icon">💻</div>
-                        <h3>Prerequisites</h3>
-                        <p>Basic Python</p>
-                    </div>
-                </div>
-
-                <div class="learning-objectives">
-                    <h3>What You'll Learn</h3>
-                    <ul>
-                        <li><strong>Resilient Web Scraping:</strong> Build scrapers that adapt to HTML changes</li>
-                        <li><strong>Automated Reporting:</strong> Generate Excel reports and Word documents programmatically</li>
-                        <li><strong>Data Visualization:</strong> Create interactive dashboards</li>
-                        <li><strong>Best Practices:</strong> Learn production-ready coding patterns</li>
-                    </ul>
-                </div>
-
-                <div class="cta-buttons">
-                    <button class="btn btn-primary" onclick="showSection('setup')">Get Started →</button>
-                    <button class="btn btn-secondary" onclick="showSection('exercises')">Jump to Exercises</button>
-                </div>
-            </section>
-
-            <!-- Setup Section -->
-            <section id="setup" class="content-section">
-                <h2>Environment Setup</h2>
-                
-                <div class="setup-options">
-                    <div class="setup-card recommended">
-                        <span class="badge">Recommended</span>
-                        <h3>Option 1: GitHub Codespaces</h3>
-                        <p>No local setup required - everything runs in the cloud!</p>
-                        <ol>
-                            <li>Click the <strong>Code</strong> button on the repository page</li>
-                            <li>Select <strong>Codespaces</strong> tab</li>
-                            <li>Click <strong>Create codespace on main</strong></li>
-                            <li>Wait 1-2 minutes for environment setup</li>
-                            <li>You're ready to code!</li>
-                        </ol>
-                    </div>
-
-                    <div class="setup-card">
-                        <h3>Option 2: Local Setup</h3>
-                        <p>Work on your own machine:</p>
-                        <div class="code-block">
-                            <pre><code># Clone the repository
-git clone https://github.com/BlueConnector/data-wrangling-automation.git
-cd data-wrangling-automation
-
-# Create virtual environment
-python -m venv venv
-
-# Activate (Mac/Linux)
-source venv/bin/activate
-# Activate (Windows)
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt</code></pre>
-                        </div>
+                    <div class="strategy">
+                        <h5>3. Structural (Last Resort)</h5>
+                        <code>table tbody tr</code>
+                        <p>Generic selectors - works but fragile</p>
                     </div>
                 </div>
 
-                <div class="verification">
-                    <h3>Verify Your Setup</h3>
-                    <p>Run this command to verify everything is installed:</p>
-                    <div class="code-block">
-                        <pre><code>python -c "import pandas, bs4, openpyxl, docx; print('✓ All dependencies installed!')"</code></pre>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="showSection('exercises')">Continue to Exercises →</button>
-            </section>
-
-            <!-- Exercises Section -->
-            <section id="exercises" class="content-section">
-                <h2>Hands-On Exercises</h2>
-                <p class="section-intro">Complete these exercises in order to build your skills progressively.</p>
-
-                <!-- Exercise 1 -->
-                <div class="exercise-card" id="exercise-1">
-                    <div class="exercise-header">
-                        <div class="exercise-meta">
-                            <span class="exercise-number">Exercise 1</span>
-                            <span class="exercise-duration">⏱️ 20 minutes</span>
-                            <span class="difficulty-badge intermediate">Intermediate</span>
-                        </div>
-                        <h3>Adaptive Web Scraping</h3>
-                    </div>
-
-                    <div class="exercise-body">
-                        <p class="exercise-description">
-                            Build a resilient web scraper that automatically adapts when website structures change, 
-                            using multiple selector strategies.
-                        </p>
-
-                        <div class="learning-objectives-box">
-                            <h4>Learning Objectives</h4>
-                            <ul>
-                                <li>Implement multiple selector strategies (ID, class, structural)</li>
-                                <li>Handle HTML changes gracefully with fallback mechanisms</li>
-                                <li>Validate scraped data for completeness</li>
-                                <li>Test against three different HTML versions</li>
-                            </ul>
-                        </div>
-
-                        <div class="exercise-steps">
-                            <h4>Your Tasks</h4>
-                            <ol>
-                                <li>Open <code>exercises/exercise_01_scraping.py</code></li>
-                                <li>Implement the <code>AdaptiveScraper</code> class with multiple selector strategies</li>
-                                <li>Add data validation to ensure all required fields are present</li>
-                                <li>Test against v1.html (should use ID selectors)</li>
-                                <li>Test against v2.html (should fall back to class selectors)</li>
-                                <li>Test against v3.html (should use structural selectors)</li>
-                            </ol>
-                        </div>
-
-                        <div class="key-concepts">
-                            <h4>Key Concepts</h4>
-                            <div class="concept-tags">
-                                <span class="concept-tag">CSS Selectors</span>
-                                <span class="concept-tag">Fallback Strategies</span>
-                                <span class="concept-tag">Data Validation</span>
-                                <span class="concept-tag">Error Handling</span>
-                            </div>
-                        </div>
-
-                        <div class="exercise-actions">
-                            <button class="btn btn-primary" onclick="toggleExerciseDetails(1)">
-                                View Detailed Instructions
-                            </button>
-                            <button class="btn btn-secondary" onclick="openFile('exercises/exercise_01_scraping.py')">
-                                Open Exercise File
-                            </button>
-                            <button class="btn btn-ghost" onclick="showHints(1)">
-                                Need Help?
-                            </button>
-                        </div>
-
-                        <div class="exercise-details" id="exercise-1-details" style="display: none;">
-                            <h4>Detailed Instructions</h4>
-                            <p><strong>Step 1: Understanding the Problem</strong></p>
-                            <p>Websites change their HTML structure frequently. Your scraper needs to handle these changes without breaking.</p>
-                            
-                            <p><strong>Step 2: Selector Hierarchy</strong></p>
-                            <ul>
-                                <li><strong>Primary:</strong> ID selectors (most specific, e.g., <code>#gdp-value</code>)</li>
-                                <li><strong>Secondary:</strong> Class selectors (e.g., <code>.metric-value[data-metric="gdp"]</code>)</li>
-                                <li><strong>Tertiary:</strong> Structural selectors (e.g., <code>table tr:nth-child(1) td:nth-child(2)</code>)</li>
-                            </ul>
-
-                            <p><strong>Step 3: Implementation Pattern</strong></p>
-                            <div class="code-block">
-                                <pre><code>for strategy in self.strategies:
-    try:
-        data = strategy.extract(soup)
-        if self.validate(data):
-            return data
-    except Exception:
-        continue
-raise ValueError("All strategies failed")</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="hints-panel" id="hints-1" style="display: none;">
-                            <h4>💡 Hints</h4>
-                            <div class="hint">
-                                <strong>Hint 1:</strong> Use BeautifulSoup's <code>select_one()</code> method for CSS selectors
-                            </div>
-                            <div class="hint">
-                                <strong>Hint 2:</strong> Store strategies in a list and iterate through them
-                            </div>
-                            <div class="hint">
-                                <strong>Hint 3:</strong> Validation should check that all required fields have non-empty values
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="exercise-footer">
-                        <div class="progress-indicator">
-                            <span class="status-icon">⬜</span>
-                            <span class="status-text">Not Started</span>
-                        </div>
-                        <button class="btn btn-sm" onclick="markComplete(1)">Mark as Complete</button>
-                    </div>
-                </div>
-
-                <!-- Exercise 2 -->
-                <div class="exercise-card" id="exercise-2">
-                    <div class="exercise-header">
-                        <div class="exercise-meta">
-                            <span class="exercise-number">Exercise 2</span>
-                            <span class="exercise-duration">⏱️ 20 minutes</span>
-                            <span class="difficulty-badge intermediate">Intermediate</span>
-                        </div>
-                        <h3>Automated Report Generation</h3>
-                    </div>
-
-                    <div class="exercise-body">
-                        <p class="exercise-description">
-                            Transform raw CSV data into professional Excel reports and Word press releases automatically.
-                        </p>
-
-                        <div class="learning-objectives-box">
-                            <h4>Learning Objectives</h4>
-                            <ul>
-                                <li>Process and analyze CSV data with pandas</li>
-                                <li>Calculate key metrics (MoM, YoY growth rates)</li>
-                                <li>Generate formatted Excel reports with charts</li>
-                                <li>Create Word documents from templates</li>
-                            </ul>
-                        </div>
-
-                        <div class="exercise-steps">
-                            <h4>Your Tasks</h4>
-                            <ol>
-                                <li>Load <code>data/sample_monthly_data.csv</code></li>
-                                <li>Calculate Month-over-Month and Year-over-Year changes</li>
-                                <li>Identify top performers and underperformers</li>
-                                <li>Generate an Excel report with formatted tables and charts</li>
-                                <li>Create a press release document using the Word template</li>
-                            </ol>
-                        </div>
-
-                        <div class="key-concepts">
-                            <h4>Key Concepts</h4>
-                            <div class="concept-tags">
-                                <span class="concept-tag">pandas DataFrames</span>
-                                <span class="concept-tag">Excel Manipulation</span>
-                                <span class="concept-tag">Chart Generation</span>
-                                <span class="concept-tag">Template Processing</span>
-                            </div>
-                        </div>
-
-                        <div class="exercise-actions">
-                            <button class="btn btn-primary" onclick="toggleExerciseDetails(2)">
-                                View Detailed Instructions
-                            </button>
-                            <button class="btn btn-secondary" onclick="openFile('exercises/exercise_02_reports.py')">
-                                Open Exercise File
-                            </button>
-                            <button class="btn btn-ghost" onclick="showHints(2)">
-                                Need Help?
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="exercise-footer">
-                        <div class="progress-indicator">
-                            <span class="status-icon">⬜</span>
-                            <span class="status-text">Not Started</span>
-                        </div>
-                        <button class="btn btn-sm" onclick="markComplete(2)">Mark as Complete</button>
-                    </div>
-                </div>
-
-                <!-- Exercise 3 (Bonus) -->
-                <div class="exercise-card bonus" id="exercise-3">
-                    <div class="exercise-header">
-                        <div class="exercise-meta">
-                            <span class="exercise-number">Exercise 3</span>
-                            <span class="badge badge-bonus">Bonus</span>
-                            <span class="exercise-duration">⏱️ 30 minutes</span>
-                            <span class="difficulty-badge advanced">Advanced</span>
-                        </div>
-                        <h3>Interactive Dashboard</h3>
-                    </div>
-
-                    <div class="exercise-body">
-                        <p class="exercise-description">
-                            Build an interactive HTML dashboard with charts and filters for exploring statistical data.
-                        </p>
-
-                        <div class="exercise-actions">
-                            <button class="btn btn-primary" onclick="toggleExerciseDetails(3)">
-                                View Instructions
-                            </button>
-                            <button class="btn btn-secondary" onclick="openFile('exercises/exercise_03_dashboard.py')">
-                                Open Exercise File
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Resources Section -->
-            <section id="resources" class="content-section">
-                <h2>Learning Resources</h2>
-
-                <div class="resource-grid">
-                    <div class="resource-card">
-                        <h3>📚 Documentation</h3>
-                        <ul>
-                            <li><a href="https://pandas.pydata.org/docs/" target="_blank">pandas User Guide</a></li>
-                            <li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank">BeautifulSoup Docs</a></li>
-                            <li><a href="https://openpyxl.readthedocs.io/" target="_blank">openpyxl Tutorial</a></li>
-                            <li><a href="https://python-docx.readthedocs.io/" target="_blank">python-docx Guide</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="resource-card">
-                        <h3>📁 Data Files</h3>
-                        <ul>
-                            <li><code>data/sample_monthly_data.csv</code> - 10 economic indicators</li>
-                            <li><code>data/historical_trends.csv</code> - 24 months of trends</li>
-                            <li><code>data/website_samples/</code> - HTML versions for scraping</li>
-                            <li><a href="#" onclick="showDataDictionary()">View Data Dictionary</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="resource-card">
-                        <h3>🛠️ Tools</h3>
-                        <ul>
-                            <li><a href="https://code.visualstudio.com/" target="_blank">VS Code</a> - Recommended editor</li>
-                            <li><a href="https://github.com/features/codespaces" target="_blank">GitHub Codespaces</a> - Cloud environment</li>
-                            <li><a href="https://jupyter.org/" target="_blank">Jupyter Notebooks</a> - Interactive Python</li>
-                        </ul>
-                    </div>
-
-                    <div class="resource-card">
-                        <h3>❓ Help</h3>
-                        <ul>
-                            <li><a href="#" onclick="showTroubleshooting()">Troubleshooting Guide</a></li>
-                            <li><a href="#" onclick="showFAQ()">Frequently Asked Questions</a></li>
-                            <li><a href="mailto:jon@blueconnector.co">Contact Instructor</a></li>
-                            <li><a href="https://github.com/BlueConnector/data-wrangling-automation/issues" target="_blank">Report an Issue</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="solutions-section">
-                    <h3>✅ Solutions</h3>
-                    <p>Complete solutions are available in the <code>solutions/</code> directory. We recommend attempting the exercises first!</p>
-                    <div class="solution-links">
-                        <a href="#" onclick="openFile('solutions/solution_01_scraping.py')" class="solution-link">
-                            Solution 1: Web Scraping
-                        </a>
-                        <a href="#" onclick="openFile('solutions/solution_02_reports.py')" class="solution-link">
-                            Solution 2: Report Generation
-                        </a>
-                        <a href="#" onclick="openFile('solutions/SOLUTIONS.md')" class="solution-link">
-                            Detailed Explanations
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Data Wrangling Training</h4>
-                    <p>© 2026 Blue Connector Pte Ltd</p>
-                    <p>For educational use only</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p>Instructor: Jon Scheele</p>
-                    <p>Email: <a href="mailto:jon@blueconnector.co">jon@blueconnector.co</a></p>
-                </div>
-                <div class="footer-section">
-                    <h4>Progress</h4>
-                    <div class="progress-summary" id="progress-summary">
-                        <p>Exercises completed: <span id="completed-count">0</span>/3</p>
-                    </div>
-                </div>
+                <p><strong>Key Insight:</strong> Multiple strategies ensure scraping works even when websites change!</p>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <section id="exercises">
+            <h2>Exercises</h2>
+
+            <div class="exercise-card">
+                <h3>Exercise 1: Adaptive Web Scraping</h3>
+                <p>Build a scraper that uses the selectors.csv configuration file.</p>
+                <p><strong>Time:</strong> 20 minutes | <strong>Difficulty:</strong> Basic → Advanced</p>
+                <div class="exercise-steps">
+                    <h4>Steps:</h4>
+                    <ol>
+                        <li>Load selector strategies from <code>data/selectors.csv</code></li>
+                        <li>Implement priority-based fallback system</li>
+                        <li>Test against multiple HTML versions</li>
+                        <li>Add progress logging for the web interface</li>
+                    </ol>
+                </div>
+                <p><strong>File:</strong> <code>exercises/exercise_01_scraping.py</code></p>
+                <button onclick="runExercise(1)">Start Exercise 1</button>
+            </div>
+
+            <div class="exercise-card">
+                <h3>Exercise 2: Automated Report Generation</h3>
+                <p>Create Excel reports, Word documents using templates, and interactive dashboards.</p>
+                <p><strong>Time:</strong> 20 minutes | <strong>Difficulty:</strong> Intermediate → Advanced</p>
+                <p><strong>File:</strong> <code>exercises/exercise_02_reports.py</code></p>
+                <button onclick="runExercise(2)">Start Exercise 2</button>
+            </div>
+
+            <div class="exercise-card">
+                <h3>Exercise 3: Dashboard Creation (Bonus)</h3>
+                <p>Build an interactive web dashboard.</p>
+                <p><strong>Time:</strong> 20 minutes | <strong>Difficulty:</strong> Advanced</p>
+                <p><strong>File:</strong> <code>exercises/exercise_03_dashboard.py</code></p>
+                <button onclick="runExercise(3)">Start Exercise 3</button>
+            </div>
+        </section>
+
+        <section id="progress">
+            <h2>Your Progress</h2>
+            <div id="progress-display">
+                <p>Complete exercises to see your progress here.</p>
+            </div>
+        </section>
+    </main>
 
     <script src="assets/js/app.js"></script>
     <script src="assets/js/exercise-runner.js"></script>
     <script src="assets/js/progress-tracker.js"></script>
 </body>
 </html>
-```
-
-### `README.md`
-```markdown
-# Data Wrangling and Automation Training
-
-**A hands-on course for statisticians and data professionals**
-
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-Educational-green.svg)](LICENSE)
-
----
-
-## 🚀 Quick Start
-
-**Get started in 2 minutes:**
-
-1. Open [`index.html`](index.html) in your browser for the full interactive experience
-2. Or jump straight to the exercises in the `exercises/` directory
-
-### Prerequisites
-- Python 3.8 or higher
-- Basic Python knowledge
-- 2-3 hours for completion
-
----
-
-## 📚 What You'll Learn
-
-This hands-on course teaches you to:
-
-- ✅ Build **resilient web scrapers** that adapt to HTML changes
-- ✅ **Automate report generation** with Excel and Word
-- ✅ Create **interactive dashboards** for data visualization
-- ✅ Apply **production-ready** coding patterns
-
----
-
-## 🏗️ Repository Structure
-
-```
-data-wrangling-automation/
-├── index.html              ← START HERE - Interactive learning interface
-├── README.md               ← You are here
-├── requirements.txt        ← Python dependencies
-│
-├── assets/                 ← Web interface assets
-│   ├── css/               ← Stylesheets
-│   │   ├── main.css
-│   │   ├── components.css
-│   │   └── exercises.css
-│   └── js/                ← JavaScript
-│       ├── app.js
-│       ├── exercise-runner.js
-│       └── progress-tracker.js
-│
-├── src/                    ← Core Python modules
-│   ├── scrapers/          ← Web scraping
-│   │   ├── base_scraper.py
-│   │   ├── adaptive_scraper.py
-│   │   └── selectors.py
-│   ├── generators/        ← Report generation
-│   │   ├── report_generator.py
-│   │   ├── press_release.py
-│   │   └── dashboard.py
-│   └── utils/             ← Utilities
-│       ├── data_processing.py
-│       ├── formatters.py
-│       └── validators.py
-│
-├── exercises/              ← Student exercises
-│   ├── exercise_01_scraping.py
-│   ├── exercise_02_reports.py
-│   └── exercise_03_dashboard.py
-│
-├── solutions/              ← Complete solutions
-│   ├── solution_01_scraping.py
-│   ├── solution_02_reports.py
-│   └── SOLUTIONS.md
-│
-├── data/                   ← Sample datasets
-│   ├── sample_monthly_data.csv
-│   ├── historical_trends.csv
-│   ├── website_samples/
-│   │   ├── v1.html
-│   │   ├── v2.html
-│   │   └── v3.html
-│   └── data_dictionary.md
-│
-├── templates/              ← Output templates
-│   ├── monthly_report_template.xlsx
-│   └── press_release_template.docx
-│
-└── output/                 ← Your generated files
-    └── .gitkeep
-```
-
----
-
-## 🎯 Exercises
-
-### Exercise 1: Adaptive Web Scraping (20 min)
-Build a scraper that handles HTML structure changes using multiple selector strategies.
-
-**File:** `exercises/exercise_01_scraping.py`
-
-### Exercise 2: Automated Report Generation (20 min)
-Transform CSV data into professional Excel reports and Word documents.
-
-**File:** `exercises/exercise_02_reports.py`
-
-### Exercise 3: Interactive Dashboards (30 min - Bonus)
-Create an HTML dashboard with charts and filters.
-
-**File:** `exercises/exercise_03_dashboard.py`
-
----
-
-## ⚙️ Setup
-
-### Option 1: GitHub Codespaces (Recommended)
-
-1. Click the **Code** button above
-2. Select **Codespaces** tab
-3. Click **Create codespace on main**
-4. Wait for environment setup
-5. Open `index.html` in browser preview
-
-### Option 2: Local Setup
-
-```bash
-# Clone repository
-git clone https://github.com/BlueConnector/data-wrangling-automation.git
-cd data-wrangling-automation
-
-# Create virtual environment
-python -m venv venv
-
-# Activate (Mac/Linux)
-source venv/bin/activate
-# Activate (Windows)
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Verify installation
-python -c "import pandas, bs4, openpyxl, docx; print('✓ Ready!')"
-```
-
----
-
-## 📊 Data Files
-
-### sample_monthly_data.csv
-10 economic indicators (GDP, CPI, Unemployment, etc.) with current, previous month, and previous year values.
-
-### historical_trends.csv
-24 months of historical data for trend analysis and visualization.
-
-### website_samples/
-Three HTML versions for testing scraper resilience:
-- `v1.html` - Original (ID selectors)
-- `v2.html` - Modified IDs (class selectors)
-- `v3.html` - Redesigned (structural selectors)
-
----
-
-## 🛠️ Development
-
-### Running Tests
-```bash
-pytest tests/
-```
-
-### Code Style
-```bash
-flake8 src/ exercises/ solutions/
-black src/ exercises/ solutions/
-```
-
----
-
-## ❓ Troubleshooting
-
-**ModuleNotFoundError**
-```bash
-pip install -r requirements.txt
-```
-
-**FileNotFoundError**
-```bash
-# Run from repository root
-cd data-wrangling-automation
-python exercises/exercise_01_scraping.py
-```
-
-**More help:** Check `index.html` → Resources → Troubleshooting
-
----
-
-## 📚 Resources
-
-- [pandas Documentation](https://pandas.pydata.org/docs/)
-- [BeautifulSoup Guide](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
-- [openpyxl Tutorial](https://openpyxl.readthedocs.io/)
-- [python-docx Docs](https://python-docx.readthedocs.io/)
-
----
-
-## 📧 Contact
-
-**Instructor:** Jon Scheele  
-**Email:** jon@blueconnector.co  
-**Company:** Blue Connector Pte Ltd
-
----
-
-## 📄 License
-
-Training materials © 2026 Blue Connector Pte Ltd  
-For educational use only
-
----
-
-**Ready to start?** Open `index.html` in your browser! 🎓
-```
-
-### `requirements.txt`
-```txt
-# Core data processing
-pandas>=2.0.0
-numpy>=1.24.0
-
-# Web scraping
-beautifulsoup4>=4.12.0
-requests>=2.31.0
-lxml>=4.9.0
-
-# Excel manipulation
-openpyxl>=3.1.0
-XlsxWriter>=3.1.0
-
-# Word document generation
-python-docx>=0.8.11
-
-# Data visualization
-matplotlib>=3.7.0
-plotly>=5.14.0
-
-# Utilities
-python-dateutil>=2.8.2
-pytz>=2023.3
-
-# Development (optional)
-pytest>=7.4.0
-pytest-cov>=4.1.0
-black>=23.0.0
-flake8>=6.0.0
-```
-
-### `.gitignore`
-```gitignore
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Virtual environments
-venv/
-ENV/
-env/
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Project specific
-output/*
-!output/.gitkeep
-*.log
-.env
-config.local.py
-
-# Data files (keep samples)
-data/*.csv
-!data/sample_*.csv
-!data/historical_trends.csv
-data/*.xlsx
-!data/templates/
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-```
-
----
-
-## 2. ASSETS DIRECTORY
-
-### `assets/css/main.css`
-```css
-/* ==========================================================================
-   CSS Variables
-   ========================================================================== */
-
-:root {
-    /* Colors */
-    --primary-color: #2563eb;
-    --primary-dark: #1e40af;
-    --primary-light: #3b82f6;
-    --secondary-color: #64748b;
-    --success-color: #22c55e;
-    --warning-color: #f59e0b;
-    --error-color: #ef4444;
-    --info-color: #06b6d4;
-    
-    /* Grays */
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
-    
-    /* Typography */
-    --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --font-code: 'Monaco', 'Courier New', 'Consolas', monospace;
-    
-    /* Spacing */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
-    --spacing-3xl: 4rem;
-    
-    /* Border radius */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.375rem;
-    --radius-lg: 0.5rem;
-    --radius-xl: 0.75rem;
-    
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px

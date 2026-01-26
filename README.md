@@ -9,13 +9,27 @@
 
 ## 🚀 Quick Start
 
-**Get started in 2 minutes:**
+### Starting the Application
 
-1. Open [`index.html`](index.html) in your browser for the full interactive experience
-2. Or jump straight to the exercises in the `exercises/` directory
+#### In GitHub Codespaces
+1. Click the "Code" button → "Open with Codespaces"
+2. Wait for the environment to set up (installs Python dependencies automatically)
+3. Open `index.html` in the browser (right-click → "Open with Live Server" or similar)
+4. The web interface will guide you through the exercises
+5. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
+
+#### Locally in VS Code
+1. Clone the repository: `git clone <repository-url>`
+2. Open in VS Code
+3. Install Python dependencies: `pip install -r requirements.txt`
+4. Install the "Live Server" extension in VS Code
+5. Right-click `index.html` → "Open with Live Server"
+6. The web interface will guide you through the exercises
+7. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
 
 ### Prerequisites
 - Python 3.8 or higher
+- VS Code with Live Server extension (for local development)
 - Basic Python knowledge
 - 2-3 hours for completion
 
@@ -50,27 +64,24 @@ data-wrangling-automation/
 │       └── progress-tracker.js
 │
 ├── src/                    ← Core Python modules
-│   ├── scrapers/          ← Web scraping
+│   ├── scrapers/          ← Web scraping utilities
 │   │   ├── base_scraper.py
 │   │   ├── adaptive_scraper.py
 │   │   └── selectors.py
-│   ├── generators/        ← Report generation
-│   │   ├── report_generator.py
-│   │   ├── press_release.py
-│   │   └── dashboard.py
-│   └── utils/             ← Utilities
+│   └── utils/             ← General utilities
 │       ├── data_processing.py
 │       ├── formatters.py
 │       └── validators.py
 │
-├── exercises/              ← Student exercises
+├── exercises/              ← Student exercises (TODO format)
 │   ├── exercise_01_scraping.py
 │   ├── exercise_02_reports.py
 │   └── exercise_03_dashboard.py
 │
-├── solutions/              ← Complete solutions
+├── solutions/              ← Complete working solutions
 │   ├── solution_01_scraping.py
 │   ├── solution_02_reports.py
+│   ├── solution_03_dashboard.py
 │   └── SOLUTIONS.md
 │
 ├── data/                   ← Sample datasets
@@ -104,7 +115,8 @@ Transform CSV data into professional Excel reports and Word documents.
 **File:** `exercises/exercise_02_reports.py`
 
 ### Exercise 3: Interactive Dashboards (30 min - Bonus)
-Create an HTML dashboard with charts and filters.
+Create a web-based dashboard application with interactive charts and filters.
+**Note:** This exercise runs a local Dash server at `http://127.0.0.1:8050/`
 
 **File:** `exercises/exercise_03_dashboard.py`
 
