@@ -12,7 +12,7 @@ class SelectorDemo {
 
         try {
             // Load selectors from API
-            const response = await fetch('http://localhost:5001/api/demo/selectors');
+            const response = await fetch('http://localhost:5000/api/demo/selectors');
             const data = await response.json();
 
             if (data.selectors) {
@@ -140,7 +140,7 @@ class SelectorDemo {
         tableContainer.style.display = 'none';
 
         try {
-            const response = await fetch('http://localhost:5001/api/demo/test-selector', {
+            const response = await fetch('http://localhost:5000/api/demo/test-selector', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
