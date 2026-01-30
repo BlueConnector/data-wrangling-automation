@@ -12,7 +12,7 @@ class SelectorDemo {
 
         try {
             // Load selectors from API
-            const response = await fetch('http://localhost:5000/api/demo/selectors');
+            const response = await fetch('http://127.0.0.1:8080/api/demo/selectors');
             const data = await response.json();
 
             if (data.selectors) {
@@ -25,7 +25,7 @@ class SelectorDemo {
             }
         } catch (error) {
             console.error('Failed to start demo:', error);
-            this.showError('Failed to start demo. Make sure the backend server is running on port 5000.');
+            this.showError('Failed to start demo. Make sure the backend server is running on port 8080.');
         }
     }
 
@@ -140,7 +140,7 @@ class SelectorDemo {
         tableContainer.style.display = 'none';
 
         try {
-            const response = await fetch('http://localhost:5000/api/demo/test-selector', {
+            const response = await fetch('http://127.0.0.1:8080/api/demo/test-selector', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -157,6 +157,10 @@ class SelectorDemo:
 # Global demo instance
 demo = SelectorDemo()
 
+@app.route('/', methods=['GET'])
+def hello_world():
+    return "Scraper backend server is running!"
+
 @app.route('/api/demo/selectors', methods=['GET'])
 def get_selectors():
     """Get all selectors from CSV"""
@@ -239,9 +243,9 @@ if __name__ == '__main__':
     demo.load_selectors()
     demo.load_html_samples()
 
-    print(f"Starting Flask server on port 5000...")
+    print(f"Starting Flask server on port 8080...")
     print(f"Data directory: {DATA_DIR}")
     print(f"Selectors loaded: {demo.selectors_df is not None}")
     print(f"HTML samples loaded: {len(demo.html_samples)} versions")
 
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=8080)

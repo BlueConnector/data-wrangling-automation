@@ -21,8 +21,25 @@
 #### Locally in VS Code
 1. Clone the repository: `git clone <repository-url>`
 2. Open in VS Code
+
+Running locally, create and activate a virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+Remember to deactivate and delete the virtual environment when you are finished:
+```bash
+deactivate
+rm -rf venv
+```
 3. Install Python dependencies: `pip install -r requirements.txt`
-4. Install the "Live Server" extension in VS Code
+4. Start the backend server
+
+```bash
+python src/backend/app.py
+```
+
 5. Right-click `index.html` → "Open with Live Server"
 6. The web interface will guide you through the exercises
 7. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
