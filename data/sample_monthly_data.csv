@@ -1,0 +1,11 @@
+indicator_code,indicator_name,period,value,unit,previous_month_value,previous_year_value
+GDP,Gross Domestic Product,2024-10,542300,millions,538100,529200
+CPI,Consumer Price Index,2024-10,138.2,index,137.8,133.9
+UNEMPLOYMENT,Unemployment Rate,2024-10,4.1,percentage,4.2,4.3
+RETAIL_SALES,Retail Sales,2024-10,68500,millions,65200,66100
+INDUSTRIAL_PROD,Industrial Production Index,2024-10,112.4,index,111.8,109.2
+HOUSING_STARTS,Housing Starts,2024-10,1420,units,1380,1510
+EXPORTS,Total Exports,2024-10,245600,millions,242800,238900
+IMPORTS,Total Imports,2024-10,312400,millions,309100,301200
+WAGES,Average Weekly Wages,2024-10,1247,dollars,1242,1198
+BUSINESS_CONFIDENCE,Business Confidence Index,2024-10,58.3,index,57.1,55.2

@@ -3,6 +3,12 @@ Demo API for Exercise 1: Selector Strategy Testing
 
 This API provides endpoints to test different CSS selectors against
 sample HTML files, demonstrating how web scraping strategies work.
+
+Endpoints:
+- /api/demo/selectors - Get all selectors from CSV
+- /api/demo/test-selector - Test a specific selector
+- /api/demo/test-all - Test all selectors
+- /api/demo/playwright - Compare BeautifulSoup vs Playwright
 """
 
 from flask import Flask, jsonify, request
@@ -11,6 +17,7 @@ import pandas as pd
 import os
 from bs4 import BeautifulSoup
 import logging
+import time
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend requests
@@ -165,7 +172,7 @@ def hello_world():
 def get_selectors():
     """Get all selectors from CSV"""
     logger.info("API call: get_selectors")
-    if not demo.selectors_df:
+    if demo.selectors_df is None:
         logger.info("Loading selectors...")
         demo.load_selectors()
 
@@ -237,6 +244,260 @@ def test_all_selectors():
         results.append(result)
 
     return jsonify({'results': results})
+
+@app.route('/api/demo/selector-fallback', methods=['POST'])
+def selector_fallback_demo():
+    """
+    Demonstrate selector fallback strategy for a specific version
+
+    Shows step-by-step how selectors are tried in priority order
+    until one succeeds, demonstrating resilience to HTML changes.
+
+    Tests the SAME set of selectors across all versions to show
+    which ones break and which ones survive redesigns.
+    """
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    version = data.get('version', 'v1')
+
+    # Load selectors and HTML if needed
+    if demo.selectors_df is None:
+        demo.load_selectors()
+
+    if not demo.html_samples:
+        demo.load_html_samples()
+
+    # Define a consistent set of selectors to test across ALL versions
+    # This shows which selectors break and which survive redesigns
+    universal_selectors = [
+        {
+            'priority': 1,
+            'selector_name': 'ID selector (v1)',
+            'selector': '#statistics-table tbody tr',
+            'comment': 'Original ID from v1 - very specific, breaks on redesign'
+        },
+        {
+            'priority': 2,
+            'selector_name': 'ID selector (v2)',
+            'selector': '#stats-data-grid tbody tr',
+            'comment': 'New ID from v2 redesign - also breaks when changed'
+        },
+        {
+            'priority': 3,
+            'selector_name': 'Class selector (v1)',
+            'selector': 'table.data-table tbody tr',
+            'comment': 'Original class name - changes with redesigns'
+        },
+        {
+            'priority': 4,
+            'selector_name': 'Class selector (v2)',
+            'selector': 'table.stats-grid-view tbody tr',
+            'comment': 'Updated class name - only works on v2'
+        },
+        {
+            'priority': 5,
+            'selector_name': 'Data attribute',
+            'selector': 'table[data-content="statistics"] tbody tr',
+            'comment': 'Semantic attribute - most stable, added in v3'
+        },
+        {
+            'priority': 6,
+            'selector_name': 'ARIA role (grid)',
+            'selector': 'table[role="grid"] tbody tr',
+            'comment': 'Accessibility attribute - works on v1 and v2'
+        },
+        {
+            'priority': 7,
+            'selector_name': 'ARIA role (table)',
+            'selector': 'table[role="table"] tbody tr',
+            'comment': 'Accessibility attribute - works on v3'
+        },
+        {
+            'priority': 8,
+            'selector_name': 'Generic table',
+            'selector': 'table tbody tr',
+            'comment': 'Last resort - matches any table (may get wrong one)'
+        }
+    ]
+
+    # Test each selector in priority order
+    attempts = []
+    first_success = None
+
+    for selector_config in universal_selectors:
+        result = demo.test_selector(
+            selector_config['selector'],
+            version,
+            selector_config['selector_name']
+        )
+
+        attempt = {
+            'priority': selector_config['priority'],
+            'selector_name': selector_config['selector_name'],
+            'selector': selector_config['selector'],
+            'comment': selector_config['comment'],
+            'success': result['success'],
+            'rows_found': result.get('rows_found', 0),
+            'data_sample': result.get('data', [])[:2]  # First 2 rows only
+        }
+
+        attempts.append(attempt)
+
+        # Track first success
+        if result['success'] and first_success is None:
+            first_success = attempt
+
+    # Count successes and failures
+    successes = len([a for a in attempts if a['success']])
+    failures = len([a for a in attempts if not a['success']])
+
+    return jsonify({
+        'version': version,
+        'total_selectors': len(attempts),
+        'successes': successes,
+        'failures': failures,
+        'attempts': attempts,
+        'first_success': first_success,
+        'explanation': {
+            'strategy': 'Test multiple selectors in priority order until one succeeds',
+            'why_it_works': 'Different selectors target different HTML attributes. When a site redesigns, some break but others survive, ensuring the scraper keeps working.'
+        }
+    })
+
+@app.route('/api/demo/playwright', methods=['POST'])
+def playwright_demo():
+    """
+    Compare BeautifulSoup vs Playwright scraping approaches
+
+    This endpoint demonstrates:
+    1. BeautifulSoup (static HTML parsing)
+    2. Playwright (browser automation)
+    3. Performance comparison
+    4. When to use each approach
+    """
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    version = data.get('version', 'v1')
+    selector = data.get('selector', 'table[data-content="statistics"] tbody tr')
+
+    # Load HTML samples if not loaded
+    if not demo.html_samples:
+        demo.load_html_samples()
+
+    html_content = demo.html_samples.get(version)
+    if not html_content:
+        return jsonify({'error': f'HTML sample for version {version} not found'}), 404
+
+    try:
+        # METHOD 1: BeautifulSoup (traditional approach)
+        start_time = time.time()
+        soup_bs = BeautifulSoup(html_content, 'html.parser')
+        rows_bs = soup_bs.select(selector)
+        data_bs = demo._parse_table_rows(rows_bs)
+        bs_time = (time.time() - start_time) * 1000  # Convert to milliseconds
+
+        # METHOD 2: Playwright (browser automation)
+        # Note: For this demo, we'll simulate Playwright by showing what it would do
+        # In a real scenario, Playwright would launch a browser and execute JavaScript
+        start_time = time.time()
+
+        try:
+            from playwright.sync_api import sync_playwright
+
+            # Create a temporary HTML file for Playwright to load
+            import tempfile
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
+                f.write(html_content)
+                temp_path = f.name
+
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page()
+                page.goto(f'file://{temp_path}')
+
+                # Get content after JavaScript execution (if any)
+                content_pw = page.content()
+                browser.close()
+
+            # Clean up temp file
+            os.unlink(temp_path)
+
+            # Parse with BeautifulSoup (same as before, but now with JS-executed content)
+            soup_pw = BeautifulSoup(content_pw, 'html.parser')
+            rows_pw = soup_pw.select(selector)
+            data_pw = demo._parse_table_rows(rows_pw)
+            pw_time = (time.time() - start_time) * 1000
+
+            playwright_available = True
+
+        except ImportError:
+            # Playwright not installed - show comparison without it
+            data_pw = data_bs  # Same data since no JavaScript in our samples
+            pw_time = bs_time * 1.5  # Simulate typical Playwright overhead
+            playwright_available = False
+
+        # Compare results
+        comparison = {
+            'version': version,
+            'selector': selector,
+            'playwright_available': playwright_available,
+            'beautifulsoup': {
+                'method': 'BeautifulSoup',
+                'description': 'Static HTML parsing - fast and simple',
+                'execution_time_ms': round(bs_time, 2),
+                'rows_found': len(rows_bs),
+                'data_extracted': len(data_bs),
+                'data': data_bs[:3],  # First 3 rows for preview
+                'pros': [
+                    'Very fast',
+                    'Low memory usage',
+                    'Simple to use',
+                    'No browser required'
+                ],
+                'cons': [
+                    'Cannot handle JavaScript',
+                    'No interaction with page',
+                    'Only sees initial HTML'
+                ]
+            },
+            'playwright': {
+                'method': 'Playwright',
+                'description': 'Browser automation - handles JavaScript and dynamic content',
+                'execution_time_ms': round(pw_time, 2),
+                'rows_found': len(rows_pw) if playwright_available else len(rows_bs),
+                'data_extracted': len(data_pw),
+                'data': data_pw[:3],  # First 3 rows for preview
+                'pros': [
+                    'Handles JavaScript',
+                    'Can interact with page',
+                    'Sees rendered content',
+                    'Supports modern web apps'
+                ],
+                'cons': [
+                    'Slower',
+                    'Higher memory usage',
+                    'More complex setup',
+                    'Requires browser'
+                ]
+            },
+            'recommendation': {
+                'for_static_sites': 'Use BeautifulSoup - it\'s faster and simpler',
+                'for_dynamic_sites': 'Use Playwright - it can execute JavaScript',
+                'for_this_demo': 'BeautifulSoup works fine since our samples are static HTML'
+            }
+        }
+
+        return jsonify(comparison)
+
+    except Exception as e:
+        logger.error(f"Playwright demo error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     # Load data on startup (don't fail if loading fails)

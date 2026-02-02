@@ -36,7 +36,8 @@ class SelectorDemo {
             <div class="exercise-overlay" onclick="closeDemo()"></div>
             <div class="exercise-content">
                 <div class="exercise-header">
-                    <h2>Exercise 1: Selector Strategy Demo</h2>
+                    <h2>🎬 Instructor Demo: Testing Selectors Step-by-Step</h2>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; font-weight: normal;">Watch how each selector is tested against the HTML versions</p>
                     <button class="close-btn" onclick="closeDemo()">×</button>
                 </div>
                 <div class="exercise-progress">
@@ -147,7 +148,7 @@ class SelectorDemo {
                 },
                 body: JSON.stringify({
                     selector: selector.selector,
-                    version: selector.url.split('_')[-1].replace('.html', ''),
+                    version: selector.url.split('_').pop().replace('.html', ''),
                     selector_name: selector.selector_name
                 })
             });
@@ -264,4 +265,147 @@ function prevSelector() {
 
 function toggleAutoRun() {
     selectorDemo.toggleAutoRun();
+}
+
+// Selector Fallback Strategy Demo
+async function runPlaywrightDemo() {
+    const version = document.getElementById('demo-version').value;
+    const resultsDiv = document.getElementById('demo-results');
+    const outputDiv = document.getElementById('demo-output');
+
+    // Show loading state
+    resultsDiv.style.display = 'block';
+    outputDiv.innerHTML = '<p>Testing selector strategies... This may take a few seconds.</p>';
+
+    try {
+        const response = await fetch('http://127.0.0.1:8080/api/demo/selector-fallback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                version: version
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Build step-by-step demonstration
+            let html = `
+                <div class="fallback-demo">
+                    <div class="demo-header">
+                        <h5>🎯 Testing ${data.version.toUpperCase()}: ${getVersionName(data.version)}</h5>
+                        <p><strong>Strategy:</strong> ${data.explanation.strategy}</p>
+                        <p><strong>Why it works:</strong> ${data.explanation.why_it_works}</p>
+                        <div style="margin-top: 1rem; padding: 0.75rem; background: white; border-radius: 6px;">
+                            <strong>Results:</strong>
+                            <span style="color: #059669; margin-left: 0.5rem;">✓ ${data.successes} succeeded</span>
+                            <span style="color: #dc2626; margin-left: 1rem;">✗ ${data.failures} failed</span>
+                        </div>
+                    </div>
+
+                    <div class="selector-attempts">
+                        <h5>Selector Testing Progress</h5>
+                        <p style="margin-bottom: 1em;"><strong>Watch the fallback strategy in action:</strong> The scraper tries each selector until one succeeds. Failed selectors are shown in red, successful ones in green.</p>
+                        ${data.attempts.map((attempt) => {
+                            const isFirstSuccess = data.first_success &&
+                                                  attempt.selector === data.first_success.selector;
+                            const statusIcon = attempt.success ? '✅' : '❌';
+                            const statusClass = attempt.success ? 'success' : 'failed';
+                            const highlightClass = isFirstSuccess ? 'first-success' : '';
+
+                            return `
+                                <div class="selector-attempt ${statusClass} ${highlightClass}">
+                                    <div class="attempt-header">
+                                        <span class="priority-badge">Priority ${attempt.priority}</span>
+                                        <span class="status-icon">${statusIcon}</span>
+                                        <strong>${attempt.selector_name}</strong>
+                                        ${isFirstSuccess ? '<span class="winner-badge">✨ FIRST SUCCESS - Used this!</span>' : ''}
+                                    </div>
+                                    <div class="attempt-details">
+                                        <code>${attempt.selector}</code>
+                                        <p class="comment">${attempt.comment}</p>
+                                        ${attempt.success ?
+                                            `<p class="result-success">✓ Found ${attempt.rows_found} rows</p>` :
+                                            `<p class="result-failed">✗ Selector found no elements</p>`
+                                        }
+                                        ${isFirstSuccess && attempt.data_sample.length > 0 ? `
+                                            <details class="data-sample">
+                                                <summary>View extracted data (first 2 rows)</summary>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Indicator</th>
+                                                            <th>Value</th>
+                                                            <th>Change</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        ${attempt.data_sample.map(row => `
+                                                            <tr>
+                                                                <td>${row.indicator}</td>
+                                                                <td>${row.value}</td>
+                                                                <td>${row.change}</td>
+                                                            </tr>
+                                                        `).join('')}
+                                                    </tbody>
+                                                </table>
+                                            </details>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="demo-summary">
+                        <h5>📊 Summary</h5>
+                        <ul>
+                            <li><strong>Selectors tested:</strong> ${data.total_selectors}</li>
+                            <li><strong>First success:</strong> ${data.first_success ? `${data.first_success.selector_name} (Priority ${data.first_success.priority})` : 'None'}</li>
+                            <li><strong>Data extracted:</strong> ${data.first_success ? `${data.first_success.rows_found} rows` : '0 rows'}</li>
+                        </ul>
+                        <p class="key-insight">
+                            <strong>💡 Key Insight:</strong>
+                            ${getVersionInsight(data.version, data.first_success)}
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            outputDiv.innerHTML = html;
+        } else {
+            outputDiv.innerHTML = `<p class="error">Error: ${data.error}</p>`;
+        }
+    } catch (error) {
+        console.error('Selector fallback demo error:', error);
+        outputDiv.innerHTML = `
+            <p class="error">Failed to run demo. Make sure the backend server is running on port 8080.</p>
+            <p>Error: ${error.message}</p>
+        `;
+    }
+}
+
+function getVersionName(version) {
+    const names = {
+        'v1': 'Original Design',
+        'v2': 'Redesigned Layout',
+        'v3': 'Major Redesign'
+    };
+    return names[version] || version;
+}
+
+function getVersionInsight(version, firstSuccess) {
+    if (!firstSuccess) {
+        return 'No selectors worked! The HTML structure may have changed too much, or none of the selectors match this version.';
+    }
+
+    const insights = {
+        'v1': `The original v1 ID selector (#statistics-table) worked immediately. But notice how v2 and v3 selectors failed on v1 - showing that ID selectors are version-specific and fragile.`,
+        'v2': `The v1 selectors FAILED on the redesigned page! The v1 ID (#statistics-table) no longer exists. But the v2 ID (#stats-data-grid) and ARIA role selectors still work. This shows why fallback strategies matter - when one breaks, another succeeds!`,
+        'v3': `After the major redesign, most old selectors FAILED! Only the data-attribute selector and v3-specific selectors work. This demonstrates that semantic attributes (data-*, aria-*) are the most stable across major redesigns. ID and class selectors broke, but semantic attributes survived!`
+    };
+
+    return insights[version] || 'Fallback strategy successfully found working selector.';
 }

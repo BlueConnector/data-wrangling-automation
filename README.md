@@ -34,21 +34,26 @@ deactivate
 rm -rf venv
 ```
 3. Install Python dependencies: `pip install -r requirements.txt`
-4. Start the backend server
+4. Install Playwright browsers (required for web scraping demos):
+```bash
+playwright install chromium
+```
+5. Start the backend server
 
 ```bash
 python src/backend/app.py
 ```
 
-5. Right-click `index.html` → "Open with Live Server"
-6. The web interface will guide you through the exercises
-7. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
+6. Right-click `index.html` → "Open with Live Server"
+7. The web interface will guide you through the exercises
+8. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
 
 ### Prerequisites
 - Python 3.8 or higher
 - VS Code with Live Server extension (for local development)
 - Basic Python knowledge
 - 2-3 hours for completion
+- **Note:** Playwright browsers will be installed during setup (~260 MB download)
 
 ---
 
@@ -166,6 +171,9 @@ venv\Scripts\activate
 # Install dependencies
 pip install -r requirements.txt
 
+# Install Playwright browsers (required for web scraping demos)
+playwright install chromium
+
 # Verify installation
 python -c "import pandas, bs4, openpyxl, docx; print('✓ Ready!')"
 ```
@@ -210,11 +218,23 @@ black src/ exercises/ solutions/
 pip install -r requirements.txt
 ```
 
+**Playwright browser not found** (when running Playwright demo)
+```bash
+# Install Playwright browsers
+playwright install chromium
+```
+
 **FileNotFoundError**
 ```bash
 # Run from repository root
 cd data-wrangling-automation
 python exercises/exercise_01_scraping.py
+```
+
+**Backend server not running** (for web interface demos)
+```bash
+# Start the Flask backend
+python src/backend/app.py
 ```
 
 **More help:** Check `index.html` → Resources → Troubleshooting
