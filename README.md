@@ -154,6 +154,9 @@ Create a web-based dashboard application with interactive charts and filters.
 4. Wait for environment setup
 5. Open `index.html` in browser preview
 
+One additional thing to check: In your Codespace, make sure port 8080 has its visibility set to Public (not Private). You can change this in the Ports tab at the bottom of VS Code. If the port is private, the frontend (served from a different port/origin) won't be able to reach it due to authentication  requirements on private forwarded ports.
+
+
 ### Option 2: Local Setup
 ```bash
 # Clone repository

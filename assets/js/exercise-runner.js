@@ -1,3 +1,17 @@
+// Determine API base URL - supports both local dev and GitHub Codespaces
+function getApiBaseUrl() {
+    const hostname = window.location.hostname;
+    if (hostname.endsWith('.app.github.dev')) {
+        // GitHub Codespaces: hostname is <codespace-name>-<port>.app.github.dev
+        // Replace the Live Server port with the backend port (8080)
+        const newHostname = hostname.replace(/-\d+\.app\.github\.dev$/, '-8080.app.github.dev');
+        return `https://${newHostname}`;
+    }
+    return 'http://127.0.0.1:8080';
+}
+
+const API_BASE = getApiBaseUrl();
+
 // Selector Strategy Demo
 class SelectorDemo {
     constructor() {
@@ -12,7 +26,7 @@ class SelectorDemo {
 
         try {
             // Load selectors from API
-            const response = await fetch('http://127.0.0.1:8080/api/demo/selectors');
+            const response = await fetch(`${API_BASE}/api/demo/selectors`);
             const data = await response.json();
 
             if (data.selectors) {
@@ -141,7 +155,7 @@ class SelectorDemo {
         tableContainer.style.display = 'none';
 
         try {
-            const response = await fetch('http://127.0.0.1:8080/api/demo/test-selector', {
+            const response = await fetch(`${API_BASE}/api/demo/test-selector`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -278,7 +292,7 @@ async function runPlaywrightDemo() {
     outputDiv.innerHTML = '<p>Testing selector strategies... This may take a few seconds.</p>';
 
     try {
-        const response = await fetch('http://127.0.0.1:8080/api/demo/selector-fallback', {
+        const response = await fetch(`${API_BASE}/api/demo/selector-fallback`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
