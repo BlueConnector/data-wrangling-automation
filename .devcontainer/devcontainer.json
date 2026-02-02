@@ -2,6 +2,15 @@
   "name": "Analytics Training for Statisticians",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
   "postCreateCommand": "pip install -r requirements.txt && playwright install chromium",
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Backend API",
+      "visibility": "public",
+      "onAutoForward": "silent"
+    }
+  },
+  "postStartCommand": "nohup python src/backend/app.py > /tmp/backend.log 2>&1 &",
   "customizations": {
     "vscode": {
       "extensions": [
