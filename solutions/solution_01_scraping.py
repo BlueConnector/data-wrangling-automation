@@ -262,7 +262,11 @@ def test_scraper():
     
     with sync_playwright() as p:
         # Launch browser in headless mode
-        browser = p.chromium.launch(headless=True)
+        # Note: --no-sandbox args required for containerized environments (e.g., GitHub Codespaces)
+        browser = p.chromium.launch(
+            headless=True,
+            args=['--no-sandbox', '--disable-setuid-sandbox']
+        )
         
         for url in urls:
             print(f"\n{'='*80}")

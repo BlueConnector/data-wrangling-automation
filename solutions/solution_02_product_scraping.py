@@ -482,7 +482,11 @@ def scrape_products(url, selectors_df, headless=True, wait_time=3):
 
     with sync_playwright() as p:
         # Launch browser
-        browser = p.chromium.launch(headless=headless)
+        # Note: --no-sandbox args required for containerized environments (e.g., GitHub Codespaces)
+        browser = p.chromium.launch(
+            headless=headless,
+            args=['--no-sandbox', '--disable-setuid-sandbox']
+        )
 
         # Create context with realistic viewport and user agent
         context = browser.new_context(
