@@ -55,6 +55,8 @@ config.local.py
 
 # Data files (keep samples)
 data/*.csv
+!data/selectors.csv
+!data/complex_selectors.csv
 !data/sample_*.csv
 !data/historical_trends.csv
 data/*.xlsx

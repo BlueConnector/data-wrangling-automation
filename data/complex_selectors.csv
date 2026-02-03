@@ -1,0 +1,13 @@
+url,selector_name,selector,priority,enabled,field_type,comment
+https://www.fairprice.com.sg/category/breads--1,Product card - href pattern,a[href*="/product/"],1,true,product_card,Most stable - matches product links by URL pattern
+https://www.fairprice.com.sg/category/breads--1,Product card - container class,div.product-container,2,true,product_card,Semantic class name if available
+https://www.fairprice.com.sg/category/breads--1,Product card - data attribute,[data-testid*="product"],3,true,product_card,Fallback if test IDs are added
+https://www.fairprice.com.sg/category/breads--1,Product name - span with product text,span:not(:has(*)),1,true,product_name,Leaf span nodes often contain just the name
+https://www.fairprice.com.sg/category/breads--1,Product name - first text node,a[href*="/product/"],2,true,product_name,Parse name from card text (first non-price line)
+https://www.fairprice.com.sg/category/breads--1,Product name - heading,h2,3,true,product_name,Name in heading element
+https://www.fairprice.com.sg/category/breads--1,Price - dollar pattern,span,1,true,price,Find spans and filter for $X.XX pattern
+https://www.fairprice.com.sg/category/breads--1,Price - data attribute,[data-price],2,true,price,Price via data attribute if available
+https://www.fairprice.com.sg/category/breads--1,Price - aria label,[aria-label*="price"],3,true,price,Price via accessibility attribute
+https://www.fairprice.com.sg/category/breads--1,SKU - from URL,a[href*="/product/"]@href,1,true,sku,Extract SKU from product URL (last number in slug)
+https://www.fairprice.com.sg/category/breads--1,SKU - data attribute,[data-sku],2,true,sku,SKU via data attribute if available
+https://www.fairprice.com.sg/category/breads--1,SKU - product id,[data-product-id],3,true,sku,Product ID data attribute fallback
