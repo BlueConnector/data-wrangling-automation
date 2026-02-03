@@ -14,9 +14,27 @@
 #### In GitHub Codespaces
 1. Click the "Code" button → "Open with Codespaces"
 2. Wait for the environment to set up (installs Python dependencies automatically)
-3. Open `index.html` in the browser (right-click → "Open with Live Server" or similar)
-4. The web interface will guide you through the exercises
-5. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
+3. Start the backend server
+
+```bash
+python src/backend/app.py
+```
+4. Ensure the Ports are Public
+
+In your Codespace, make sure port 8080 has its visibility set to Public (not Private). You can change this in the Ports tab at the bottom of VS Code. If the port is private, the frontend (served from a different port/origin) won't be able to reach it due to authentication requirements on private forwarded ports.
+
+Click on the Ports tab in the Terminal window
+![GitHub Codespaces Ports Tab](images/GitHub_Codespaces_Ports_Tab.jpg)
+
+Right-click on the Backend Server port
+![GitHub Codespaces Ports Settings](images/GitHub_Codespaces_Ports_Settings.jpg)
+
+Select "Public" as the Port Visibility
+![GitHub Codespaces Port Visibility](images/GitHub_Codespaces_Port_Visibility.jpg)
+
+5. Open `index.html` in the browser (right-click → "Open with Live Server" or similar)
+6. The web interface will guide you through the exercises
+7. **Note:** Exercise 3 runs a local Dash server - follow the in-exercise instructions
 
 #### Locally in VS Code
 1. Clone the repository: `git clone <repository-url>`
@@ -144,45 +162,6 @@ Create a web-based dashboard application with interactive charts and filters.
 
 ---
 
-## ⚙️ Setup
-
-### Option 1: GitHub Codespaces (Recommended)
-
-1. Click the **Code** button above
-2. Select **Codespaces** tab
-3. Click **Create codespace on main**
-4. Wait for environment setup
-5. Open `index.html` in browser preview
-
-One additional thing to check: In your Codespace, make sure port 8080 has its visibility set to Public (not Private). You can change this in the Ports tab at the bottom of VS Code. If the port is private, the frontend (served from a different port/origin) won't be able to reach it due to authentication  requirements on private forwarded ports.
-
-
-### Option 2: Local Setup
-```bash
-# Clone repository
-git clone https://github.com/BlueConnector/data-wrangling-automation.git
-cd data-wrangling-automation
-
-# Create virtual environment
-python -m venv venv
-
-# Activate (Mac/Linux)
-source venv/bin/activate
-# Activate (Windows)
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Install Playwright browsers (required for web scraping demos)
-playwright install chromium
-
-# Verify installation
-python -c "import pandas, bs4, openpyxl, docx; print('✓ Ready!')"
-```
-
----
-
 ## 📊 Data Files
 
 ### sample_monthly_data.csv
@@ -265,7 +244,3 @@ python src/backend/app.py
 
 Training materials © 2026 Blue Connector Pte Ltd  
 For educational use only
-
----
-
-**Ready to start?** Open `index.html` in your browser! 🎓
