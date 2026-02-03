@@ -1,13 +1,14 @@
 url,selector_name,selector,priority,enabled,comment
-data/website_sample_v1.html,ID selector,#statistics-table tbody tr,1,true,Original design - uses specific table ID
-data/website_sample_v1.html,Class selector,table.data-table tbody tr,2,true,Fallback using CSS class name
-data/website_sample_v1.html,ARIA role,table[role="grid"] tbody tr,3,true,Accessibility attribute - very stable
-data/website_sample_v1.html,Generic table,table tbody tr,4,true,Last resort - matches any table on page
-data/website_sample_v2.html,Alternative ID,#stats-data-grid tbody tr,1,true,Updated ID after redesign
-data/website_sample_v2.html,Alternative class,table.stats-grid-view tbody tr,2,true,New class name from redesign
-data/website_sample_v2.html,ARIA role,table[role="grid"] tbody tr,3,true,ARIA role unchanged - good fallback
-data/website_sample_v2.html,Generic table,table tbody tr,4,true,Catches any table structure
-data/website_sample_v3.html,Data attribute,table[data-content="statistics"] tbody tr,1,true,New in v3 - most reliable semantic selector
-data/website_sample_v3.html,ARIA role,table[role="table"] tbody tr,2,true,Changed from grid to table role
-data/website_sample_v3.html,Class selector,table.economic-data tbody tr,3,true,Dark theme version class name
-data/website_sample_v3.html,Generic table,table tbody tr,4,true,Universal fallback for any table
+data/website_samples/v1.html,ID selector,#statistics-table tbody tr,1,true,Original design - uses specific table ID
+data/website_samples/v1.html,Class selector,table.data-table tbody tr,2,true,Fallback using CSS class name
+data/website_samples/v1.html,ARIA role,table[role="grid"] tbody tr,3,true,Accessibility attribute - very stable
+data/website_samples/v1.html,Generic table,table tbody tr,4,true,Last resort - matches any table on page
+data/website_samples/v2.html,ID selector,#statistics-table tbody tr,1,true,Try original specific table ID
+data/website_samples/v2.html,Alternative ID,#stats-data-grid tbody tr,1,true,Updated ID after redesign
+data/website_samples/v2.html,Alternative class,table.stats-grid-view tbody tr,2,true,New class name from redesign
+data/website_samples/v2.html,ARIA role,table[role="grid"] tbody tr,3,true,ARIA role unchanged - good fallback
+data/website_samples/v2.html,Generic table,table tbody tr,4,true,Catches any table structure
+data/website_samples/v3.html,Data attribute,table[data-content="statistics"] tbody tr,1,true,New in v3 - most reliable semantic selector
+data/website_samples/v3.html,ARIA role,table[role="table"] tbody tr,2,true,Changed from grid to table role
+data/website_samples/v3.html,Class selector,table.economic-data tbody tr,3,true,Dark theme version class name
+data/website_samples/v3.html,Generic table,table tbody tr,4,true,Universal fallback for any table
