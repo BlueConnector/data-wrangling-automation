@@ -30,7 +30,7 @@ Right-click on the Backend Server port
 ![GitHub Codespaces Ports Settings](images/GitHub_Codespaces_Ports_Settings.jpg)
 
 Select "Public" as the Port Visibility
-![GitHub Codespaces Port Visibility](images/GitHub_Codespaces_Port_Visibility.jpg)
+![GitHub Codespaces Port Visibility](images/GitHub_Codespaces_Select_Port_Visibility.jpg)
 
 5. Open `index.html` in the browser (right-click → "Open with Live Server" or similar)
 6. The web interface will guide you through the exercises
