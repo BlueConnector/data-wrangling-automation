@@ -22,7 +22,7 @@ Instructions:
 5. The scraper should work across all versions using fallback strategies
 
 Reference:
-- If you get stuck, check exercise_01_scraping_OLD.py for reference
+- If you get stuck, check solutions/solution_01_scraping.py for reference
 - The solution file is available in solutions/solution_01_scraping.py
 """
 

@@ -1,0 +1,217 @@
+[
+  {
+    "url": "data/website_samples/v1.html",
+    "success": true,
+    "valid": true,
+    "count": 8,
+    "data": [
+      {
+        "name": "Gross Domestic Product",
+        "value": "542,300M",
+        "change": "+0.78",
+        "period": "Oct 2024",
+        "code": "GDP"
+      },
+      {
+        "name": "Consumer Price Index",
+        "value": "118.5",
+        "change": "+0.59",
+        "period": "Oct 2024",
+        "code": "CPI"
+      },
+      {
+        "name": "Unemployment Rate",
+        "value": "3.2%",
+        "change": "-5.88",
+        "period": "Oct 2024",
+        "code": "UNEMPLOYMENT"
+      },
+      {
+        "name": "Retail Sales",
+        "value": "45,600M",
+        "change": "+1.79",
+        "period": "Oct 2024",
+        "code": "RETAIL_SALES"
+      },
+      {
+        "name": "Industrial Production Index",
+        "value": "112.3",
+        "change": "+0.45",
+        "period": "Oct 2024",
+        "code": "INDUSTRIAL_PROD"
+      },
+      {
+        "name": "Housing Starts",
+        "value": "1,850",
+        "change": "-3.65",
+        "period": "Oct 2024",
+        "code": "HOUSING_STARTS"
+      },
+      {
+        "name": "Total Exports",
+        "value": "28,900M",
+        "change": "+2.48",
+        "period": "Oct 2024",
+        "code": "EXPORTS"
+      },
+      {
+        "name": "Total Imports",
+        "value": "32,400M",
+        "change": "+1.89",
+        "period": "Oct 2024",
+        "code": "IMPORTS"
+      }
+    ],
+    "progress": [
+      "Fetched HTML content from data/website_samples/v1.html",
+      "Trying selector: ID selector (#statistics-table tbody tr)",
+      "SUCCESS: ID selector found 8 rows",
+      "Extracted 8 indicators",
+      "Validation PASSED: All 8 items have required fields"
+    ]
+  },
+  {
+    "url": "data/website_samples/v2.html",
+    "success": true,
+    "valid": true,
+    "count": 8,
+    "data": [
+      {
+        "name": "Gross Domestic Product",
+        "value": "542,300M",
+        "change": "+0.78",
+        "period": "Oct 2024",
+        "code": "GDP"
+      },
+      {
+        "name": "Consumer Price Index",
+        "value": "118.5",
+        "change": "+0.59",
+        "period": "Oct 2024",
+        "code": "CPI"
+      },
+      {
+        "name": "Unemployment Rate",
+        "value": "3.2%",
+        "change": "-5.88",
+        "period": "Oct 2024",
+        "code": "UNEMPLOYMENT"
+      },
+      {
+        "name": "Retail Sales",
+        "value": "45,600M",
+        "change": "+1.79",
+        "period": "Oct 2024",
+        "code": "RETAIL_SALES"
+      },
+      {
+        "name": "Industrial Production Index",
+        "value": "112.3",
+        "change": "+0.45",
+        "period": "Oct 2024",
+        "code": "INDUSTRIAL_PROD"
+      },
+      {
+        "name": "Housing Starts",
+        "value": "1,850",
+        "change": "-3.65",
+        "period": "Oct 2024",
+        "code": "HOUSING_STARTS"
+      },
+      {
+        "name": "Total Exports",
+        "value": "28,900M",
+        "change": "+2.48",
+        "period": "Oct 2024",
+        "code": "EXPORTS"
+      },
+      {
+        "name": "Total Imports",
+        "value": "32,400M",
+        "change": "+1.89",
+        "period": "Oct 2024",
+        "code": "IMPORTS"
+      }
+    ],
+    "progress": [
+      "Fetched HTML content from data/website_samples/v2.html",
+      "Trying selector: ID selector (#statistics-table tbody tr)",
+      "FAILED: ID selector found no elements",
+      "Trying selector: Alternative ID (#stats-data-grid tbody tr)",
+      "SUCCESS: Alternative ID found 8 rows",
+      "Extracted 8 indicators",
+      "Validation PASSED: All 8 items have required fields"
+    ]
+  },
+  {
+    "url": "data/website_samples/v3.html",
+    "success": true,
+    "valid": true,
+    "count": 8,
+    "data": [
+      {
+        "name": "Gross Domestic Product",
+        "value": "542,300M",
+        "change": "0.78",
+        "period": "Oct 2024",
+        "code": "GDP"
+      },
+      {
+        "name": "Consumer Price Index",
+        "value": "118.5",
+        "change": "0.59",
+        "period": "Oct 2024",
+        "code": "CPI"
+      },
+      {
+        "name": "Unemployment Rate",
+        "value": "3.2%",
+        "change": "5.88",
+        "period": "Oct 2024",
+        "code": "UNEMPLOYMENT"
+      },
+      {
+        "name": "Retail Sales",
+        "value": "45,600M",
+        "change": "1.79",
+        "period": "Oct 2024",
+        "code": "RETAIL_SALES"
+      },
+      {
+        "name": "Industrial Production Index",
+        "value": "112.3",
+        "change": "0.45",
+        "period": "Oct 2024",
+        "code": "INDUSTRIAL_PROD"
+      },
+      {
+        "name": "Housing Starts",
+        "value": "1,850",
+        "change": "3.65",
+        "period": "Oct 2024",
+        "code": "HOUSING_STARTS"
+      },
+      {
+        "name": "Total Exports",
+        "value": "28,900M",
+        "change": "2.48",
+        "period": "Oct 2024",
+        "code": "EXPORTS"
+      },
+      {
+        "name": "Total Imports",
+        "value": "32,400M",
+        "change": "1.89",
+        "period": "Oct 2024",
+        "code": "IMPORTS"
+      }
+    ],
+    "progress": [
+      "Fetched HTML content from data/website_samples/v3.html",
+      "Trying selector: Data attribute (table[data-content=\"statistics\"] tbody tr)",
+      "SUCCESS: Data attribute found 8 rows",
+      "Extracted 8 indicators",
+      "Validation PASSED: All 8 items have required fields"
+    ]
+  }
+]
