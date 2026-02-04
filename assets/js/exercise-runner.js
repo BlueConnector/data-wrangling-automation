@@ -134,7 +134,7 @@ class SelectorDemo {
         document.getElementById('selector-name').textContent = selector.selector_name;
         document.getElementById('selector-code').textContent = selector.selector;
         document.getElementById('selector-priority').textContent = selector.priority;
-        document.getElementById('selector-target').textContent = selector.url.replace('data/website_sample_', '').replace('.html', '');
+        document.getElementById('selector-target').textContent = selector.url.split('/').pop().replace('.html', '');
 
         const commentEl = document.getElementById('selector-comment');
         if (selector.comment) {
@@ -162,7 +162,7 @@ class SelectorDemo {
                 },
                 body: JSON.stringify({
                     selector: selector.selector,
-                    version: selector.url.split('_').pop().replace('.html', ''),
+                    version: selector.url.split('/').pop().replace('.html', ''),
                     selector_name: selector.selector_name
                 })
             });

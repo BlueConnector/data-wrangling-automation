@@ -225,7 +225,7 @@ def test_all_selectors():
     # Group selectors by URL/version
     for _, row in demo.selectors_df.iterrows():
         url = row['url']
-        version = url.split('_')[-1].replace('.html', '')  # Extract v1, v2, v3
+        version = url.split('/')[-1].replace('.html', '')  # Extract v1, v2, v3
 
         result = demo.test_selector(
             row['selector'],
