@@ -33,6 +33,12 @@ def load_dashboard_data():
         historical_path = 'data/historical_trends.csv'
         if os.path.exists(historical_path):
             historical_df = pd.read_csv(historical_path)
+            # Create mapping from indicator codes to full names using monthly data
+            code_to_name = dict(zip(monthly_df['indicator_code'], monthly_df['indicator_name']))
+            # Map codes to full names and rename columns
+            historical_df['indicator_name'] = historical_df['indicator_code'].map(code_to_name)
+            historical_df = historical_df.rename(columns={'period': 'date'})
+            historical_df = historical_df.drop(columns=['indicator_code'])
             print(f"✓ Loaded historical data: {len(historical_df)} records")
         else:
             historical_df = None
@@ -83,37 +89,98 @@ def create_trend_chart(df, indicator_name):
     return fig
 
 
-def create_comparison_chart(df):
+def create_indicator_cards(df, selected_indicator=None):
     """
-    Create a bar chart comparing current values across indicators
+    Create indicator cards showing current values and month-over-month changes
 
     Args:
-        df: DataFrame with indicator data
+        df: DataFrame with indicator data (must have indicator_name, value, unit, previous_month_value)
+        selected_indicator: Optional indicator to highlight
 
     Returns:
-        plotly Figure object
+        List of Dash html components (cards)
     """
     if df is None:
-        return None
+        return []
 
-    # Get the most recent data for each indicator
-    latest_data = df.sort_values('date').groupby('indicator_name').last().reset_index()
+    cards = []
+    for _, row in df.iterrows():
+        indicator_name = row['indicator_name']
+        value = row['value']
+        unit = row['unit']
+        prev_value = row['previous_month_value']
 
-    fig = px.bar(
-        latest_data,
-        x='indicator_name',
-        y='value',
-        title='Current Indicator Values',
-        color='indicator_name'
-    )
+        # Calculate month-over-month change
+        if prev_value and prev_value != 0:
+            change = value - prev_value
+            change_pct = (change / prev_value) * 100
 
-    fig.update_layout(
-        xaxis_title="Indicator",
-        yaxis_title="Current Value",
-        showlegend=False
-    )
+            # For unemployment, lower is better (invert color logic)
+            is_unemployment = 'unemployment' in indicator_name.lower()
+            if is_unemployment:
+                is_positive = change < 0
+            else:
+                is_positive = change > 0
 
-    return fig
+            change_color = '#28a745' if is_positive else '#dc3545'
+            arrow = '▲' if change > 0 else '▼' if change < 0 else ''
+            change_text = f"{arrow} {abs(change):,.1f} ({abs(change_pct):.1f}%)"
+        else:
+            change_text = "N/A"
+            change_color = '#6c757d'
+
+        # Format value based on unit
+        if unit == 'millions':
+            formatted_value = f"${value:,.0f}M"
+        elif unit == 'percentage':
+            formatted_value = f"{value:.1f}%"
+        elif unit == 'index':
+            formatted_value = f"{value:.1f}"
+        elif unit == 'dollars':
+            formatted_value = f"${value:,.0f}"
+        elif unit == 'units':
+            formatted_value = f"{value:,.0f}"
+        else:
+            formatted_value = f"{value:,.1f}"
+
+        # Highlight selected indicator
+        is_selected = indicator_name == selected_indicator
+        border_color = '#007bff' if is_selected else '#dee2e6'
+        border_width = '3px' if is_selected else '1px'
+        background = '#f8f9ff' if is_selected else '#ffffff'
+
+        card = html.Div([
+            html.H4(indicator_name, style={
+                'margin': '0 0 10px 0',
+                'fontSize': '14px',
+                'color': '#495057'
+            }),
+            html.Div(formatted_value, style={
+                'fontSize': '24px',
+                'fontWeight': 'bold',
+                'color': '#212529'
+            }),
+            html.Div(change_text, style={
+                'fontSize': '14px',
+                'color': change_color,
+                'marginTop': '5px'
+            }),
+            html.Div(f"vs. previous month", style={
+                'fontSize': '11px',
+                'color': '#6c757d'
+            })
+        ], style={
+            'padding': '15px',
+            'border': f'{border_width} solid {border_color}',
+            'borderRadius': '8px',
+            'backgroundColor': background,
+            'textAlign': 'center',
+            'minWidth': '180px'
+        })
+
+        cards.append(card)
+
+    return cards
 
 
 def create_dashboard_app(monthly_df, historical_df):
@@ -150,9 +217,16 @@ def create_dashboard_app(monthly_df, historical_df):
             dcc.Graph(id='trend-chart'),
         ], style={'marginBottom': 30}),
 
-        html.Div([
-            dcc.Graph(id='comparison-chart'),
-        ])
+        html.H3('Current Indicator Values', style={'marginBottom': 15}),
+        html.Div(
+            id='indicator-cards',
+            style={
+                'display': 'flex',
+                'flexWrap': 'wrap',
+                'gap': '15px',
+                'justifyContent': 'flex-start'
+            }
+        )
     ])
 
     @app.callback(
@@ -162,27 +236,36 @@ def create_dashboard_app(monthly_df, historical_df):
     def update_trend_chart(selected_indicator):
         """Update the trend chart based on selected indicator"""
         if selected_indicator and historical_df is not None:
-            return create_trend_chart(historical_df, selected_indicator)
-        elif selected_indicator and monthly_df is not None:
-            # Create a simple chart from monthly data
-            indicator_data = monthly_df[monthly_df['indicator_name'] == selected_indicator]
-            fig = px.bar(
-                indicator_data,
-                x='date',
-                y='value',
-                title=f'{selected_indicator} (Monthly Data)'
+            fig = create_trend_chart(historical_df, selected_indicator)
+            if fig is not None:
+                return fig
+
+        # No historical data available - show message
+        if selected_indicator:
+            fig = go.Figure()
+            fig.add_annotation(
+                text=f"No historical trend data available for {selected_indicator}",
+                xref="paper", yref="paper",
+                x=0.5, y=0.5,
+                showarrow=False,
+                font=dict(size=16, color="#6c757d")
+            )
+            fig.update_layout(
+                title=f'{selected_indicator} Trend',
+                xaxis=dict(visible=False),
+                yaxis=dict(visible=False),
+                height=300
             )
             return fig
-        else:
-            return {}
+        return {}
 
     @app.callback(
-        Output('comparison-chart', 'figure'),
+        Output('indicator-cards', 'children'),
         Input('indicator-dropdown', 'value')
     )
-    def update_comparison_chart(selected_indicator):
-        """Update the comparison chart (static for now)"""
-        return create_comparison_chart(monthly_df) or {}
+    def update_indicator_cards(selected_indicator):
+        """Update indicator cards with highlighted selection"""
+        return create_indicator_cards(monthly_df, selected_indicator)
 
     return app
 
@@ -207,7 +290,7 @@ def run_dashboard():
     print("🌐 Open your browser to: http://127.0.0.1:8050/")
     print("💡 Use Ctrl+C to stop the server")
 
-    app.run_server(debug=True)
+    app.run(debug=True)
 
 
 if __name__ == "__main__":

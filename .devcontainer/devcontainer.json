@@ -17,7 +17,9 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "mechatroner.rainbow-csv",
-        "ritwickdey.LiveServer"
+        "ritwickdey.LiveServer",
+        "grapecity.gc-excelviewer",
+        "shahilkumar.docxreader"
       ]
     }
   }
